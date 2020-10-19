@@ -20,6 +20,7 @@ public class Snake implements KeyboardHandler {
     private boolean directionChanged;
     // Keyboard
     KeyboardListener snakeListener = new KeyboardListener(this);
+    Keyboard keyboard = new Keyboard(snakeListener);
 
     public Snake() {
         snakeBody = new LinkedList<>();
@@ -70,12 +71,78 @@ public class Snake implements KeyboardHandler {
             try {
                 snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
             }catch (IndexOutOfBoundsException e){
-                snakeBody.get(i).setDirection(snakeBody.get(i - 1), null);
+                snakeBody.get(i).setDirection(snakeBody.get(i - 1), getHead());
             }
 
         }
         checkCollision();
     }
+
+    public void updateSprites(SnakeParts bodyPart) {
+
+        //head cases
+        if(bodyPart == snakeBody.get(0)) {
+            if (bodyPart.getPreviousDirection() == Direction.LEFT) {
+                bodyPart.updateSprite("assets/snakeHeadLeft");
+            } else if (bodyPart.getPreviousDirection() == Direction.RIGHT) {
+                bodyPart.updateSprite("assets/snakeHeadRight");
+            } else if (bodyPart.getPreviousDirection() == Direction.UP) {
+                bodyPart.updateSprite("assets/snakeHeadUp");
+            } else if (bodyPart.getPreviousDirection() == Direction.DOWN) {
+                bodyPart.updateSprite("assets/snakeHeadDown");
+            }
+        }
+        //tail cases
+        else if (bodyPart == snakeBody.get(length-1)) {
+            if (bodyPart.getNextDirection() == Direction.LEFT) {
+                bodyPart.updateSprite("assets/snakeTailLeft");
+            } else if (bodyPart.getNextDirection() == Direction.RIGHT) {
+                bodyPart.updateSprite("assets/snakeTailRight");
+            } else if (bodyPart.getNextDirection() == Direction.UP) {
+                bodyPart.updateSprite("assets/snakeTailUp");
+            } else if (bodyPart.getNextDirection() == Direction.DOWN) {
+                bodyPart.updateSprite("assets/snakeTailDown");
+            }
+        }
+        //body cases: might be possible to shrink this
+        else {
+            if (bodyPart.getPreviousDirection() == Direction.LEFT) {
+                if (bodyPart.getNextDirection() == Direction.LEFT) {
+                    bodyPart.updateSprite("assets/snakeBodyHorizontal");
+                } else if (bodyPart.getNextDirection() == Direction.DOWN) {
+                    bodyPart.updateSprite("assets/snakeBodyLeftDown");
+                } else if (bodyPart.getNextDirection() == Direction.UP) {
+                    bodyPart.updateSprite("assets/snakeBodyLeftUp");
+                }
+            }else if (bodyPart.getPreviousDirection() == Direction.RIGHT) {
+                if (bodyPart.getNextDirection() == Direction.RIGHT) {
+                    bodyPart.updateSprite("assets/snakeBodyHorizontal");
+                } else if (bodyPart.getNextDirection() == Direction.DOWN) {
+                    bodyPart.updateSprite("assets/snakeBodyRightDown");
+                } else if (bodyPart.getNextDirection() == Direction.UP) {
+                    bodyPart.updateSprite("assets/snakeBodyRightUp");
+                }
+            } else if (bodyPart.getPreviousDirection() == Direction.DOWN) {
+                if (bodyPart.getNextDirection() == Direction.DOWN) {
+                    bodyPart.updateSprite("assets/snakeBodyVertical");
+                } else if (bodyPart.getNextDirection() == Direction.LEFT) {
+                    bodyPart.updateSprite("assets/snakeBodyRightUp");
+                } else if (bodyPart.getNextDirection() == Direction.RIGHT) {
+                    bodyPart.updateSprite("assets/snakeBodyLeftUp");
+                }
+            } else {
+                if (bodyPart.getNextDirection() == Direction.UP) {
+                    bodyPart.updateSprite("assets/snakeBodyVertical");
+                } else if (bodyPart.getNextDirection() == Direction.LEFT) {
+                    bodyPart.updateSprite("assets/snakeBodyRightDown");
+                } else if (bodyPart.getNextDirection() == Direction.RIGHT) {
+                    bodyPart.updateSprite("assets/snakeBodyLeftDown");
+
+                }
+            }
+        }
+    }
+
 
     public void checkCollision(){
 
@@ -83,8 +150,9 @@ public class Snake implements KeyboardHandler {
         int headY=getHead().getY();
 
         for(int i=1;i<length; i++){
-            if(getSnakeBody().get(i).getY()==headY&&getSnakeBody().get(i).getX()==headX){
-                isDead=true;
+            if (getSnakeBody().get(i).getY() == headY && getSnakeBody().get(i).getX() == headX) {
+                isDead = true;
+                break;
             }
         }
     }
@@ -107,7 +175,6 @@ public class Snake implements KeyboardHandler {
 
     public void keyboardHandling() {
 
-        Keyboard keyboard = new Keyboard(snakeListener);
 
         KeyboardEvent left = new KeyboardEvent();
         left.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
@@ -141,26 +208,6 @@ public class Snake implements KeyboardHandler {
         }
     }
 
-    public SnakeParts getHead() {
-        return snakeBody.getFirst();
-    }
-
-    public void setDirectionChanged(boolean value) {
-        directionChanged = value;
-    }
-
-    public boolean isDirectionChanged() {
-        return directionChanged;
-    }
-
-    public LinkedList<SnakeParts> getSnakeBody() {
-        return snakeBody;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
     @Override
     public void keyPressed(KeyboardEvent e) {
         if (isDirectionChanged()) {
@@ -188,5 +235,29 @@ public class Snake implements KeyboardHandler {
     @Override
     public void keyReleased(KeyboardEvent e) {
 
+    }
+
+    public SnakeParts getTail() {
+        return snakeBody.getLast();
+    }
+
+    public SnakeParts getHead() {
+        return snakeBody.getFirst();
+    }
+
+    public void setDirectionChanged(boolean value) {
+        directionChanged = value;
+    }
+
+    public boolean isDirectionChanged() {
+        return directionChanged;
+    }
+
+    public LinkedList<SnakeParts> getSnakeBody() {
+        return snakeBody;
+    }
+
+    public int getLength() {
+        return length;
     }
 }

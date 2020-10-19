@@ -1,4 +1,5 @@
 package org.academiadecodigo.tailormoons.snake.Node;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 import org.academiadecodigo.tailormoons.snake.SnakeGame;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
@@ -9,8 +10,11 @@ import org.academiadecodigo.tailormoons.snake.Snake;
 public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node {
 
     private Rectangle figure;
+    private Picture sprite;
     private Direction direction;
     private Direction previousDirection;
+    private Direction nextDirection;
+
 
     public SnakeParts(int x, int y) {
         super(x, y);
@@ -19,6 +23,13 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
         figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
         figure.setColor(Color.GREEN);
         figure.fill();
+
+
+    }
+
+    public void updateSprite(String path) {
+        sprite = new Picture(x, y, path);
+        sprite.draw();
     }
 
     public void setColor(Color color){
@@ -86,7 +97,10 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
 
     public void setDirection(SnakeParts previous, SnakeParts next) {
         direction = previous.getPreviousDirection();
+        nextDirection = next.getNextDirection();
     }
+
+
 
     public void copyDirection(SnakeParts part) {
         previousDirection = part.getPreviousDirection();
@@ -97,10 +111,17 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
         return previousDirection;
     }
 
+    public Direction getNextDirection() {
+        return nextDirection;
+    }
+
     public void setPreviousDirection(Direction direction) {
         previousDirection = direction;
     }
 
+    public void setNextDirection(Direction direction) {
+        nextDirection = direction;
+    }
     public void setDirection(Direction direction) {
         if (this.direction.isOpposite(direction)) {
             return;
