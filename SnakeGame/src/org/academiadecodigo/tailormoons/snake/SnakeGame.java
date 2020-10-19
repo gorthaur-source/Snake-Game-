@@ -12,52 +12,35 @@ public class SnakeGame {
 
 
     // grid stuff
+    private SnakeGrid grid;
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
     public static final int ROWS = 40;
     public static final int COLS = 80;
-    private Consumable food;
     //
-    protected static int delay = 20;
+    protected static int delay = 60;
     private Snake snake;
     private int score;
     private Text scoreText = new Text(5, 2, "Score: " + score);
 
 
-    SnakeGame() {
-    }
-
-
-    public void initGrid() {
-        Rectangle gridRect = new Rectangle(PADDING, PADDING, COLS * CELL_SIZE, ROWS * CELL_SIZE);
-        gridRect.setColor(Color.BLACK);
-        gridRect.fill();
-        scoreText.setColor(Color.RED);
-        scoreText.draw();
+    SnakeGame(SnakeGrid grid) {
+        this.grid = grid;
     }
 
     private void snakeInit() {
-        snake = new Snake();
+        snake = new Snake(grid);
         for (int i = 0; i < snake.getLength(); i++) {
             snake.getSnakeBody().add(new SnakeParts(SnakeGame.COLS / 2, SnakeGame.ROWS / 2 + i));
         }
     }
 
     public void init() {
-        initGrid();
+        grid.initGrid();
         snakeInit();
-        createFood();
+        grid.setSnake(snake);
+        grid.createFood();
 
-    }
-
-    public void createFood() {
-        int x, y;
-        do {
-            x = new Random().nextInt(COLS);
-            y = new Random().nextInt(ROWS);
-            food = new Consumable(x, y);
-        } while (snake.snakeOnFood(food));
-        food.show();
     }
 
 
@@ -66,14 +49,14 @@ public class SnakeGame {
         snake.keyboardHandling();
 
         while (!isGameOver()) {
-            snake.move();
             Thread.sleep(delay);
-            if (snakeHasEaten(food)) {
+            snake.move();
+            if (snakeHasEaten(grid.getFood())) {
                 score += 100;
                 updateScore();
                 snake.grow();
-                food.hide();
-                createFood();
+                grid.getFood().hide();
+                grid.createFood();
             }
         }
 

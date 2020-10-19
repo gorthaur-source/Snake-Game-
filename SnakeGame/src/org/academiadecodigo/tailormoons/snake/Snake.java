@@ -18,11 +18,13 @@ public class Snake implements KeyboardHandler {
     private boolean isDead = false;
     private boolean growing;
     private boolean directionChanged;
+    private SnakeGrid grid;
     // Keyboard
     KeyboardListener snakeListener = new KeyboardListener(this);
     Keyboard keyboard = new Keyboard(snakeListener);
 
-    public Snake() {
+    public Snake(SnakeGrid grid) {
+        this.grid = grid;
         snakeBody = new LinkedList<>();
     }
 
@@ -57,7 +59,7 @@ public class Snake implements KeyboardHandler {
                 snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
             }
 
-            checkCollision();
+            grid.checkCollision();
             growing = false;
             return;
         }
@@ -75,7 +77,7 @@ public class Snake implements KeyboardHandler {
             }
 
         }
-        checkCollision();
+        grid.checkCollision();
     }
 
     public void updateSprites(SnakeParts bodyPart) {
@@ -144,18 +146,7 @@ public class Snake implements KeyboardHandler {
     }
 
 
-    public void checkCollision(){
 
-        int headX=getHead().getX();
-        int headY=getHead().getY();
-
-        for(int i=1;i<length; i++){
-            if (getSnakeBody().get(i).getY() == headY && getSnakeBody().get(i).getX() == headX) {
-                isDead = true;
-                break;
-            }
-        }
-    }
 
     public boolean snakeOnFood(Consumable food) {
 
@@ -237,6 +228,10 @@ public class Snake implements KeyboardHandler {
 
     }
 
+
+    public void setIsDead() {
+        isDead = true;
+    }
     public SnakeParts getTail() {
         return snakeBody.getLast();
     }
