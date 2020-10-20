@@ -2,6 +2,8 @@ package org.academiadecodigo.tailormoons.snake.SnakeGrid;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
+import org.academiadecodigo.tailormoons.snake.Keyboard.KeyHandler;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 
@@ -11,22 +13,18 @@ public class SnakeGridObstacles implements SnakeGrid {
 
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static int ROWS;
-    public static int COLS;
+    public static final int ROWS = 40;
+    public static final int COLS = 60;
     private boolean[][] isCovered;
-    private Snake[] snake = new Snake[2];
-    private Consumable food;
+
 
     public SnakeGridObstacles() {
 
     }
 
-
     @Override
-    public void initGrid(int rows, int columns) {
-        ROWS = rows;
-        COLS = columns;
-        Rectangle gridRect = new Rectangle(PADDING, PADDING, columns * CELL_SIZE, rows * CELL_SIZE);
+    public void initGrid() {
+        Rectangle gridRect = new Rectangle(PADDING, PADDING, COLS * CELL_SIZE, ROWS * CELL_SIZE);
         gridRect.setColor(Color.BLACK);
         gridRect.fill();
         isCovered = new boolean[COLS][ROWS];
@@ -58,98 +56,11 @@ public class SnakeGridObstacles implements SnakeGrid {
         }
     }
 
-    public void createFood() {
-        int x, y;
-        do {
-            x = new Random().nextInt(COLS);
-            y = new Random().nextInt(ROWS);
-            food = new Consumable(x, y);
-        } while (snake[0].snakeOnFood(food) || snake[1].snakeOnFood(food) || isCovered[x][y]);
-        food.show();
+
+    public boolean[][] getIsCovered() {
+        return isCovered;
     }
-
-    @Override
-    public Consumable getFood() {
-        return food;
-    }
-
-
-    public void checkCollisionSnake(Snake snake) {
-
-        //  int headX
-    }
-
-    @Override
-    public void checkCollision() {
-        int headX = snake[0].getHead().getX();
-        int headY = snake[0].getHead().getY();
-
-        for (int i = 1; i < snake[0].getLength(); i++) {
-            if (snake[0].getSnakeBody().get(i).getY() == headY && snake[0].getSnakeBody().get(i).getX() == headX) {
-                snake[0].setIsDead();
-                break;
-            }
-        }
-
-        switch (snake[0].getHead().getDirection()) {
-            case UP:
-                headY--;
-                break;
-            case RIGHT:
-                headX++;
-                break;
-            case DOWN:
-                headY++;
-                break;
-            case LEFT:
-                headX--;
-                break;
-        }
-        if (headX < 0 || headX >= COLS || headY < 0 || headY >= ROWS) {
-            return;
-        }
-        if (isCovered[headX][headY]) {
-            snake[0].setIsDead();
-        }
-
-        headX = snake[1].getHead().getX();
-        headY = snake[1].getHead().getY();
-
-        for (int i = 1; i < snake[1].getLength(); i++) {
-            if (snake[1].getSnakeBody().get(i).getY() == headY && snake[1].getSnakeBody().get(i).getX() == headX) {
-                System.out.println("hello");
-                snake[1].setIsDead();
-                break;
-            }
-        }
-
-        switch (snake[1].getHead().getDirection()) {
-            case UP:
-                headY--;
-                break;
-            case RIGHT:
-                headX++;
-                break;
-            case DOWN:
-                headY++;
-                break;
-            case LEFT:
-                headX--;
-                break;
-        }
-        if (headX < 0 || headX >= COLS || headY < 0 || headY >= ROWS) {
-            return;
-        }
-        if (isCovered[headX][headY]) {
-            snake[1].setIsDead();
-        }
-    }
-
-    @Override
-    public void setSnake(Snake[] snakes) {
-        snake[0] = snakes[0];
-        snake[1] = snakes[1];
-    }
-
 }
+
+
 

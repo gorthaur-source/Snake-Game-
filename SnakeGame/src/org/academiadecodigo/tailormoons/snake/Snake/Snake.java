@@ -16,7 +16,7 @@ public class Snake {
     private boolean isDead = false;
     private boolean growing;
     private boolean directionChanged;
-    private final SnakeGrid grid;
+    private SnakeGrid grid;
     private double speed = 2;
 
 
@@ -57,7 +57,6 @@ public class Snake {
                     snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
                 }
 
-                grid.checkCollision();
                 growing = false;
                 return;
             }
@@ -76,7 +75,6 @@ public class Snake {
                 }
 
             }
-            grid.checkCollision();
 
     }
 

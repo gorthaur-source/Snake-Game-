@@ -5,6 +5,7 @@ import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.tailormoons.snake.Direction;
+import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 
 public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node {
 
@@ -44,7 +45,7 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
         switch (direction) {
             case LEFT:
                 if (x == 0) {
-                    x = SnakeGame1P.COLS - 1;
+                    x = SnakeGridNormal.COLS - 1;
                     figure.delete();
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
@@ -55,7 +56,7 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
                 figure.translate(-SnakeGame1P.CELL_SIZE, 0);
                 break;
             case DOWN:
-                if (y == SnakeGame1P.ROWS - 1) {
+                if (y == SnakeGridNormal.ROWS - 1) {
                     y = 0;
                     figure.delete();
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
@@ -68,7 +69,7 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
                 break;
             case UP:
                 if (y == 0) {
-                    y = SnakeGame1P.ROWS - 1;
+                    y = SnakeGridNormal.ROWS - 1;
                     figure.delete();
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
@@ -79,7 +80,7 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
                 figure.translate(0, -SnakeGame1P.CELL_SIZE);
                 break;
             case RIGHT:
-                if (x == SnakeGame1P.COLS - 1) {
+                if (x == SnakeGridNormal.COLS - 1) {
                     x = 0;
                     figure.delete();
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);

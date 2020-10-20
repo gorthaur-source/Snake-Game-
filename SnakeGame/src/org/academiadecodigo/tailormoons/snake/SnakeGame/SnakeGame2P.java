@@ -10,83 +10,69 @@ import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
 
+import java.util.Random;
+
 public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     // grid stuff
     private SnakeGrid grid;
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static int ROWS = 20;
-    public static int COLS = 40;
+    public static final int ROWS = 40;
+    public static final int COLS = 60;
     //
     protected static int delay = 120;
     private int scoreOne;
     private int scoreTwo;
     private Text scoreTextOne = new Text(5, 2, "Player one score: " + scoreOne);
     private Text scoreTextTwo = new Text((COLS-8) * CELL_SIZE, 2, "Player two score: "+ scoreTwo);
-    private Snake[] snake = new Snake[2];
+    private Snake playerOne;
+    private Snake playerTwo;
+    private Consumable food;
+    private boolean[][] isCovered = new boolean[COLS][ROWS];
 
     public SnakeGame2P(SnakeGrid grid) {
         this.grid = grid;
+
     }
 
     public void init() {
-        grid.initGrid(ROWS, COLS);
-        snakeInit();
-        grid.setSnake(snake);
-        grid.createFood();
+        grid.initGrid();
+        isCovered = grid.getIsCovered();
         scoreTextOne.setColor(Color.RED);
         scoreTextTwo.setColor(Color.RED);
         scoreTextOne.draw();
         scoreTextTwo.draw();
-
-
+        createFood();
 
     }
-
-
 
     public void start() throws InterruptedException {
 
         while (!isGameOver()) {
 
-            Thread.sleep((long) (delay/snake[0].getSpeed()));
-            snake[0].move();
-            snake[1].move();
-            if (snakeHasEaten(grid.getFood())) {
+            Thread.sleep((long) (delay/playerOne.getSpeed()));
+            playerOne.move();
+            playerOne.move();
+            if (snakeHasEaten(playerOne)) {
                 scoreOne += 100;
                 updateScore();
-                snake[0].grow();
-                grid.getFood().hide();
-                grid.createFood();
+                playerOne.grow();
+                food.hide();
+                createFood();
             }
-            else if (snakeTwoHasEaten(grid.getFood())) {
+            else if (snakeHasEaten(playerTwo)) {
                 scoreTwo += 100;
                 updateScoreTwo();
-                snake[1].grow();
-                grid.getFood().hide();
-                grid.createFood();
+                playerTwo.grow();
+                food.hide();
+                createFood();
             }
         }
     }
-    public void snakeInit() {
-
-        for(int i = 0; i < snake.length; i++) {
-            snake[i] = new Snake(grid);
-        }
-
-        for (int i = 0; i < snake[0].getLength(); i++) {
-            snake[0].getSnakeBody().add(new SnakeParts(COLS / 8, ROWS / 2 + i));
-            snake[1].getSnakeBody().add(new SnakeParts((COLS/8 * 7), ROWS/2 + i));
-        }
-    }
-
 
     public boolean isGameOver() {
-        for (Snake value : snake) {
-            return value.isDead();
-        }
-        return false;
+        return playerOne.isDead() || playerTwo.isDead();
     }
 
     public void updateScore() {
@@ -107,69 +93,94 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     @Override
     public void pressed(KeyboardEvent e) {
-        if(!snake[0].isDirectionChanged()) {
-            snake[0].setDirectionChanged(true);
+        if(!playerOne.isDirectionChanged()) {
+            playerOne.setDirectionChanged(true);
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_LEFT: {
-                    snake[0].changeDirection(Direction.LEFT);
+                    playerOne.changeDirection(Direction.LEFT);
                     break;
                 }
                 case KeyboardEvent.KEY_RIGHT: {
-                    snake[0].changeDirection(Direction.RIGHT);
+                    playerOne.changeDirection(Direction.RIGHT);
                     break;
                 }
                 case KeyboardEvent.KEY_UP: {
-                    snake[0].changeDirection(Direction.UP);
+                    playerOne.changeDirection(Direction.UP);
                     break;
                 }
                 case KeyboardEvent.KEY_DOWN: {
-                    snake[0].changeDirection(Direction.DOWN);
+                    playerOne.changeDirection(Direction.DOWN);
                     break;
                 }
             }
         }
-        if(!snake[1].isDirectionChanged()) {
-            snake[1].setDirectionChanged(true);
+        if(!playerTwo.isDirectionChanged()) {
+            playerTwo.setDirectionChanged(true);
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_A: {
-                    snake[1].changeDirection(Direction.LEFT);
+                    playerOne.changeDirection(Direction.LEFT);
                     break;
                 }
                 case KeyboardEvent.KEY_D: {
-                    snake[1].changeDirection(Direction.RIGHT);
+                    playerTwo.changeDirection(Direction.RIGHT);
                     break;
                 }
                 case KeyboardEvent.KEY_W: {
-                    snake[1].changeDirection(Direction.UP);
+                    playerTwo.changeDirection(Direction.UP);
                     break;
                 }
                 case KeyboardEvent.KEY_S: {
-                    snake[1].changeDirection(Direction.DOWN);
+                    playerTwo.changeDirection(Direction.DOWN);
                     break;
                 }
             }
         }
     }
+    public void checkCollisionSnake(Snake snake) {
+        int headX = snake.getHead().getX();
+        int headY = snake.getHead().getY();
 
-    public boolean snakeHasEaten(Consumable food) {
-        SnakeParts head = snake[0].getSnakeBody().getFirst();
+        for (int i = 1; i < snake.getLength(); i++) {
+            if (snake.getSnakeBody().get(i).getY() == headY && snake.getSnakeBody().get(i).getX() == headX) {
+                snake.setIsDead();
+                break;
+            }
+        }
+        switch (snake.getHead().getDirection()) {
+            case UP:
+                headY--;
+                break;
+            case RIGHT:
+                headX++;
+                break;
+            case DOWN:
+                headY++;
+                break;
+            case LEFT:
+                headX--;
+                break;
+        }
+    }
+
+    public void createFood() {
+        int x, y;
+        do {
+            x = new Random().nextInt(COLS);
+            y = new Random().nextInt(ROWS);
+            food = new Consumable(x, y);
+        } while (playerOne.snakeOnFood(food) || playerTwo.snakeOnFood(food) || isCovered[x][y]);
+        food.show();
+    }
+    public void checkCollision(){
+        checkCollisionSnake(playerOne);
+        checkCollisionSnake(playerTwo);
+    }
+    public boolean snakeHasEaten(Snake snake) {
+        SnakeParts head = playerOne.getSnakeBody().getFirst();
         return Math.abs(head.getX() - food.getX()) + Math.abs(head.getY() - food.getY()) == 0;
     }
 
-    @Override
-    public Snake getSnake() {
-        return null;
-    }
 
-    @Override
-    public SnakeGrid getGrid() {
-        return grid;
-    }
-
-    public boolean snakeTwoHasEaten(Consumable food) {
-        SnakeParts head = snake[1].getSnakeBody().getFirst();
-        return Math.abs(head.getX() - food.getX()) + Math.abs(head.getY() - food.getY()) == 0;
-    }
 
 
 }

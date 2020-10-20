@@ -6,15 +6,12 @@ import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 public interface SnakeGrid {
 
 
-    void initGrid(int rows, int columns);
+    void initGrid();
 
-    void createFood();
+    boolean[][] getIsCovered();
 
-    Consumable getFood();
 
-    void checkCollision();
 
-    void setSnake(Snake[] snake);
 }
 
 

@@ -13,6 +13,7 @@ import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
+import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 
 import java.util.Random;
 
@@ -23,16 +24,15 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
     private SnakeGrid grid;
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static final int ROWS = 20;
-    public static final int COLS = 40;
+
 
     //
     protected static int delay = 120;
-    private Snake[] snake = new Snake[1];
+    private Snake snake;
     private Consumable food;
     private int score;
     private Text scoreText = new Text(5, 2, "Score: " + score);
-
+    private boolean[][] isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
 
 
     public SnakeGame1P(SnakeGrid grid) {
@@ -43,67 +43,72 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
     }
 
 
-
-    public void createFood() {
-        int x, y;
-        do {
-            x = new Random().nextInt(COLS);
-            y = new Random().nextInt(ROWS);
-            food = new Consumable(x, y);
-        } while (snake[0].snakeOnFood(food));
-        food.show();
-    }
-
     public Consumable getFood() {
         return food;
     }
 
-    public void checkCollision(){
 
-        int headX=snake[0].getHead().getX();
-        int headY=snake[0].getHead().getY();
+    public void checkCollisionSnake() {
+        int headX = snake.getHead().getX();
+        int headY = snake.getHead().getY();
 
-        for(int i=1;i<snake[0].getLength(); i++){
-            if (snake[0].getSnakeBody().get(i).getY() == headY && snake[0].getSnakeBody().get(i).getX() == headX) {
-                snake[0].setIsDead();
+        for (int i = 1; i < snake.getLength(); i++) {
+            if (snake.getSnakeBody().get(i).getY() == headY && snake.getSnakeBody().get(i).getX() == headX) {
+                snake.setIsDead();
                 break;
             }
         }
-    }
-
-    public void snakeInit() {
-        snake[0] = new Snake(grid);
-        for (int i = 0; i < snake[0].getLength(); i++) {
-            snake[0].getSnakeBody().add(new SnakeParts(SnakeGame1P.COLS / 2, SnakeGame1P.ROWS / 2 + i));
+        switch (snake.getHead().getDirection()) {
+            case UP:
+                headY--;
+                break;
+            case RIGHT:
+                headX++;
+                break;
+            case DOWN:
+                headY++;
+                break;
+            case LEFT:
+                headX--;
+                break;
         }
     }
 
+    public void createFood() {
+        int x, y;
+        do {
+            x = new Random().nextInt(SnakeGridNormal.COLS);
+            y = new Random().nextInt(SnakeGridNormal.ROWS);
+            food = new Consumable(x, y);
+
+        } while (snake.snakeOnFood(food) || isCovered[x][y]);
+        food.show();
+
+    }
+
     public void init() {
-        grid.initGrid(ROWS, COLS);
-        snakeInit();
-        grid.setSnake(snake);
-        grid.createFood();
+        grid.initGrid();
+        createFood();
     }
 
 
     public void start() throws InterruptedException {
 
         while (!isGameOver()) {
-                Thread.sleep((long) (delay/snake[0].getSpeed()));
-                snake[0].move();
-            if (snakeHasEaten(grid.getFood())) {
+                Thread.sleep((long) (delay/snake.getSpeed()));
+                snake.move();
+            if (snakeHasEaten(snake)) {
                 score += 100;
                 updateScore();
-                snake[0].grow();
-                grid.getFood().hide();
-                grid.createFood();
+                snake.grow();
+                food.hide();
+                createFood();
             }
         }
-
     }
 
     public boolean isGameOver() {
-        if (snake[0].isDead()) {
+        if (snake.isDead()) {
             return true;
         }
         return false;
@@ -117,39 +122,35 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
 
     }
 
-    public boolean snakeHasEaten(Consumable food) {
-        SnakeParts head = snake[0].getSnakeBody().getFirst();
+    public boolean snakeHasEaten(Snake snake) {
+        SnakeParts head = snake.getSnakeBody().getFirst();
         return Math.abs(head.getX() - food.getX()) + Math.abs(head.getY() - food.getY()) == 0;
     }
 
     public Snake getSnake() {
-        return snake[0];
-    }
-
-    public SnakeGrid getGrid() {
-        return grid;
+        return snake;
     }
 
 
     @Override
     public void pressed(KeyboardEvent e) {
-        if(!snake[0].isDirectionChanged()) {
-            snake[0].setDirectionChanged(true);
+        if(!snake.isDirectionChanged()) {
+            snake.setDirectionChanged(true);
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_LEFT: {
-                    snake[0].changeDirection(Direction.LEFT);
+                    snake.changeDirection(Direction.LEFT);
                     break;
                 }
                 case KeyboardEvent.KEY_RIGHT: {
-                    snake[0].changeDirection(Direction.RIGHT);
+                    snake.changeDirection(Direction.RIGHT);
                     break;
                 }
                 case KeyboardEvent.KEY_UP: {
-                    snake[0].changeDirection(Direction.UP);
+                    snake.changeDirection(Direction.UP);
                     break;
                 }
                 case KeyboardEvent.KEY_DOWN: {
-                    snake[0].changeDirection(Direction.DOWN);
+                    snake.changeDirection(Direction.DOWN);
                     break;
                 }
             }

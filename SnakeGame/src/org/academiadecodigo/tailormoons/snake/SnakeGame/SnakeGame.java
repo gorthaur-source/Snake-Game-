@@ -11,9 +11,8 @@ public interface SnakeGame {
 
 
 
-    public void snakeInit();
-
     public void init();
+
 
     public void start() throws InterruptedException;
 
@@ -21,10 +20,6 @@ public interface SnakeGame {
 
     public void updateScore();
 
-    public boolean snakeHasEaten(Consumable food);
-
-    public Snake getSnake();
-
-    public SnakeGrid getGrid();
+    public boolean snakeHasEaten(Snake snake);
 
 }
