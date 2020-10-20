@@ -3,9 +3,12 @@ package org.academiadecodigo.tailormoons.snake.SnakeGame;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListener;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListenerSnake;
+import org.academiadecodigo.tailormoons.snake.Direction;
+import org.academiadecodigo.tailormoons.snake.Keyboard.KeyHandler;
+
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
@@ -13,15 +16,16 @@ import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
 
 import java.util.Random;
 
-public class SnakeGame1P implements SnakeGame {
+public class SnakeGame1P implements SnakeGame, KeyHandler {
 
 
     // grid stuff
     private SnakeGrid grid;
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static final int ROWS = 30;
+    public static final int ROWS = 20;
     public static final int COLS = 40;
+
     //
     protected static int delay = 120;
     private Snake[] snake = new Snake[1];
@@ -31,12 +35,14 @@ public class SnakeGame1P implements SnakeGame {
 
 
 
-    SnakeGame1P(SnakeGrid grid) {
+    public SnakeGame1P(SnakeGrid grid) {
         this.grid = grid;
         scoreText.setColor(Color.RED);
         scoreText.draw();
 
     }
+
+
 
     public void createFood() {
         int x, y;
@@ -77,20 +83,10 @@ public class SnakeGame1P implements SnakeGame {
         snakeInit();
         grid.setSnake(snake);
         grid.createFood();
-
     }
 
-
-    public void keyboardSnakeInit() {
-        KeyboardListener snakeOneListener = new KeyboardListenerSnake(snake[0]);
-        snake[0].setKeyboardListener(snakeOneListener);
-        snake[0].setKeyboard(new Keyboard((KeyboardHandler) snakeOneListener));
-        snake[0].getSnakeListener().keyboardHandling();
-    }
 
     public void start() throws InterruptedException {
-
-        keyboardSnakeInit();
 
         while (!isGameOver()) {
                 Thread.sleep((long) (delay/snake[0].getSpeed()));
@@ -135,5 +131,28 @@ public class SnakeGame1P implements SnakeGame {
     }
 
 
-
+    @Override
+    public void pressed(KeyboardEvent e) {
+        if(!snake[0].isDirectionChanged()) {
+            snake[0].setDirectionChanged(true);
+            switch (e.getKey()) {
+                case KeyboardEvent.KEY_LEFT: {
+                    snake[0].changeDirection(Direction.LEFT);
+                    break;
+                }
+                case KeyboardEvent.KEY_RIGHT: {
+                    snake[0].changeDirection(Direction.RIGHT);
+                    break;
+                }
+                case KeyboardEvent.KEY_UP: {
+                    snake[0].changeDirection(Direction.UP);
+                    break;
+                }
+                case KeyboardEvent.KEY_DOWN: {
+                    snake[0].changeDirection(Direction.DOWN);
+                    break;
+                }
+            }
+        }
+    }
 }

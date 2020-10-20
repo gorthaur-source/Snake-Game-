@@ -3,8 +3,6 @@ package org.academiadecodigo.tailormoons.snake.Snake;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.tailormoons.snake.Direction;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListener;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListenerSnake;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
@@ -20,9 +18,7 @@ public class Snake {
     private boolean directionChanged;
     private final SnakeGrid grid;
     private double speed = 2;
-    // Keyboard
-    KeyboardListener snakeListener;
-    Keyboard keyboard;
+
 
     public Snake(SnakeGrid grid) {
         this.grid = grid;
@@ -171,19 +167,9 @@ public class Snake {
         }
     }
 
-    public KeyboardListener getSnakeListener() {
-        return snakeListener;
-    }
-    public Keyboard getKeyboard() {
-        return keyboard;
-    }
 
     public void setIsDead() {
         isDead = true;
-    }
-    
-    public SnakeParts getTail() {
-        return snakeBody.getLast();
     }
 
     public SnakeParts getHead() {
@@ -205,13 +191,7 @@ public class Snake {
     public double getSpeed() {
         return speed;
     }
-    public void setKeyboard(Keyboard snakeKeyboard) {
-        keyboard = snakeKeyboard;
-    }
 
-    public void setKeyboardListener(KeyboardListener snakeListener) {
-        this.snakeListener = snakeListener;
-    }
     public int getLength() {
         return length;
     }

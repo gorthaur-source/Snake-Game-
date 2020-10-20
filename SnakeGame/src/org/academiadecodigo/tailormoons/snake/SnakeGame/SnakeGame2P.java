@@ -2,25 +2,22 @@ package org.academiadecodigo.tailormoons.snake.SnakeGame;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Text;
-import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListener;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListenerSnake;
-import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListenerSnakeTwo;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
+import org.academiadecodigo.tailormoons.snake.Direction;
+import org.academiadecodigo.tailormoons.snake.Keyboard.KeyHandler;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
-import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
 
-public class SnakeGame2P implements SnakeGame {
+public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     // grid stuff
     private SnakeGrid grid;
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static final int ROWS = 40;
-    public static final int COLS = 60;
+    public static int ROWS = 20;
+    public static int COLS = 40;
     //
     protected static int delay = 120;
     private int scoreOne;
@@ -47,28 +44,9 @@ public class SnakeGame2P implements SnakeGame {
 
     }
 
-    public void keyboardSnakeInit() {
-
-
-        KeyboardListener snakeTwoListener = new KeyboardListenerSnakeTwo(snake[0]);
-        snake[0].setKeyboardListener(snakeTwoListener);
-        snake[0].setKeyboard(new Keyboard((KeyboardHandler) snakeTwoListener));
-        snake[0].getSnakeListener().keyboardHandling();
-
-
-        KeyboardListener snakeOneListener = new KeyboardListenerSnake(snake[1]);
-        snake[1].setKeyboardListener(snakeOneListener);
-        snake[1].setKeyboard(new Keyboard((KeyboardHandler) snakeOneListener));
-        snake[1].getSnakeListener().keyboardHandling();
-
-
-
-    }
 
 
     public void start() throws InterruptedException {
-
-        keyboardSnakeInit();
 
         while (!isGameOver()) {
 
@@ -103,6 +81,7 @@ public class SnakeGame2P implements SnakeGame {
         }
     }
 
+
     public boolean isGameOver() {
         for (Snake value : snake) {
             return value.isDead();
@@ -124,6 +103,52 @@ public class SnakeGame2P implements SnakeGame {
         scoreTextTwo.setColor(Color.RED);
         scoreTextTwo.draw();
 
+    }
+
+    @Override
+    public void pressed(KeyboardEvent e) {
+        if(!snake[0].isDirectionChanged()) {
+            snake[0].setDirectionChanged(true);
+            switch (e.getKey()) {
+                case KeyboardEvent.KEY_LEFT: {
+                    snake[0].changeDirection(Direction.LEFT);
+                    break;
+                }
+                case KeyboardEvent.KEY_RIGHT: {
+                    snake[0].changeDirection(Direction.RIGHT);
+                    break;
+                }
+                case KeyboardEvent.KEY_UP: {
+                    snake[0].changeDirection(Direction.UP);
+                    break;
+                }
+                case KeyboardEvent.KEY_DOWN: {
+                    snake[0].changeDirection(Direction.DOWN);
+                    break;
+                }
+            }
+        }
+        if(!snake[1].isDirectionChanged()) {
+            snake[1].setDirectionChanged(true);
+            switch (e.getKey()) {
+                case KeyboardEvent.KEY_A: {
+                    snake[1].changeDirection(Direction.LEFT);
+                    break;
+                }
+                case KeyboardEvent.KEY_D: {
+                    snake[1].changeDirection(Direction.RIGHT);
+                    break;
+                }
+                case KeyboardEvent.KEY_W: {
+                    snake[1].changeDirection(Direction.UP);
+                    break;
+                }
+                case KeyboardEvent.KEY_S: {
+                    snake[1].changeDirection(Direction.DOWN);
+                    break;
+                }
+            }
+        }
     }
 
     public boolean snakeHasEaten(Consumable food) {
