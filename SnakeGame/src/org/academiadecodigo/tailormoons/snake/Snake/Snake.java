@@ -1,31 +1,33 @@
-package org.academiadecodigo.tailormoons.snake;
+package org.academiadecodigo.tailormoons.snake.Snake;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
+import org.academiadecodigo.tailormoons.snake.Direction;
+import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListener;
+import org.academiadecodigo.tailormoons.snake.Keyboard.KeyboardListenerSnake;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
-import org.academiadecodigo.tailormoons.snake.Node.Node;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
+import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
 
 import java.util.LinkedList;
 
-public class Snake implements KeyboardHandler {
+public class Snake {
 
-    private LinkedList<SnakeParts> snakeBody;
+    private final LinkedList<SnakeParts> snakeBody;
     private int length = 15;
     private boolean isDead = false;
     private boolean growing;
     private boolean directionChanged;
-    private SnakeGrid grid;
+    private final SnakeGrid grid;
+    private double speed = 2;
     // Keyboard
-    KeyboardListener snakeListener = new KeyboardListener(this);
-    Keyboard keyboard = new Keyboard(snakeListener);
+    KeyboardListener snakeListener;
+    Keyboard keyboard;
 
     public Snake(SnakeGrid grid) {
         this.grid = grid;
         snakeBody = new LinkedList<>();
+
     }
 
 
@@ -37,47 +39,49 @@ public class Snake implements KeyboardHandler {
 
         directionChanged = false;
 
-        if (growing) {
+            if (growing) {
 
-            SnakeParts temp = snakeBody.get(length - 2);
+                SnakeParts temp = snakeBody.get(length - 2);
 
-            snakeBody.add(length - 1, new SnakeParts(temp.getX(), temp.getY()));
-            length++;
+                snakeBody.add(length - 1, new SnakeParts(temp.getX(), temp.getY()));
+                length++;
 
-            snakeBody.get(length - 2).copyDirection(temp);
-            snakeBody.get(length - 2).setColor(Color.RED);
+                snakeBody.get(length - 2).copyDirection(temp);
+                snakeBody.get(length - 2).setColor(Color.RED);
 
-            for (int i = 0; i < length - 2; i++) {
-                snakeBody.get(i).moveInDirection();
+                for (int i = 0; i < length - 2; i++) {
+                    snakeBody.get(i).moveInDirection();
+
+                }
+
+                snakeBody.get(0).setPreviousDirection(snakeBody.get(0).getDirection());
+
+                for (int i = 1; i < length - 2; i++) {
+                    snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
+                    snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
+                }
+
+                grid.checkCollision();
+                growing = false;
+                return;
             }
 
-
-            snakeBody.get(0).setPreviousDirection(snakeBody.get(0).getDirection());
-
-            for (int i = 1; i < length - 2; i++) {
+            for (int i = 0; i < length; i++) {
                 snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
-                snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
-            }
+                snakeBody.get(i).moveInDirection();
 
+                if (snakeBody.get(i) == getHead()) {
+                    continue;
+                }
+                try {
+                    snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
+                } catch (IndexOutOfBoundsException e) {
+                    snakeBody.get(i).setDirection(snakeBody.get(i - 1), getHead());
+                }
+
+            }
             grid.checkCollision();
-            growing = false;
-            return;
-        }
 
-        for (int i = 0; i < length; i++) {
-            snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
-            snakeBody.get(i).moveInDirection();
-            if (snakeBody.get(i) == getHead()) {
-                continue;
-            }
-            try {
-                snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
-            }catch (IndexOutOfBoundsException e){
-                snakeBody.get(i).setDirection(snakeBody.get(i - 1), getHead());
-            }
-
-        }
-        grid.checkCollision();
     }
 
     public void updateSprites(SnakeParts bodyPart) {
@@ -145,9 +149,6 @@ public class Snake implements KeyboardHandler {
         }
     }
 
-
-
-
     public boolean snakeOnFood(Consumable food) {
 
         for (int i = 0; i < length; i++) {
@@ -164,74 +165,23 @@ public class Snake implements KeyboardHandler {
     }
 
 
-    public void keyboardHandling() {
-
-
-        KeyboardEvent left = new KeyboardEvent();
-        left.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        left.setKey(KeyboardEvent.KEY_LEFT);
-
-        keyboard.addEventListener(left);
-
-        KeyboardEvent right = new KeyboardEvent();
-        right.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        right.setKey(KeyboardEvent.KEY_UP);
-
-        keyboard.addEventListener(right);
-
-        KeyboardEvent up = new KeyboardEvent();
-        up.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        up.setKey(KeyboardEvent.KEY_RIGHT);
-
-        keyboard.addEventListener(up);
-
-        KeyboardEvent down = new KeyboardEvent();
-        down.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        down.setKey(KeyboardEvent.KEY_DOWN);
-
-        keyboard.addEventListener(down);
-    }
-
-
     public void changeDirection(Direction newDirection) {
         if (!(getHead().getDirection().isOpposite(newDirection))) {
             getHead().setDirection(newDirection);
         }
     }
 
-    @Override
-    public void keyPressed(KeyboardEvent e) {
-        if (isDirectionChanged()) {
-            setDirectionChanged(true);
-            switch (e.getKey()) {
-                case KeyboardEvent.KEY_LEFT: {
-                    changeDirection(Direction.LEFT);
-                }
-                case KeyboardEvent.KEY_RIGHT: {
-                    changeDirection(Direction.RIGHT);
-                    break;
-                }
-                case KeyboardEvent.KEY_UP: {
-                    changeDirection(Direction.UP);
-                    break;
-                }
-                case KeyboardEvent.KEY_DOWN: {
-                    changeDirection(Direction.DOWN);
-                    break;
-                }
-            }
-        }
+    public KeyboardListener getSnakeListener() {
+        return snakeListener;
     }
-
-    @Override
-    public void keyReleased(KeyboardEvent e) {
-
+    public Keyboard getKeyboard() {
+        return keyboard;
     }
-
 
     public void setIsDead() {
         isDead = true;
     }
+    
     public SnakeParts getTail() {
         return snakeBody.getLast();
     }
@@ -252,6 +202,16 @@ public class Snake implements KeyboardHandler {
         return snakeBody;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+    public void setKeyboard(Keyboard snakeKeyboard) {
+        keyboard = snakeKeyboard;
+    }
+
+    public void setKeyboardListener(KeyboardListener snakeListener) {
+        this.snakeListener = snakeListener;
+    }
     public int getLength() {
         return length;
     }

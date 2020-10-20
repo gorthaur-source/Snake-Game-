@@ -3,7 +3,7 @@ package org.academiadecodigo.tailormoons.snake.Node;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
-import org.academiadecodigo.tailormoons.snake.SnakeGame;
+import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 
 public class Consumable extends Node{
 
@@ -12,12 +12,10 @@ public class Consumable extends Node{
 
     public Consumable(int x, int y) {
         super(x, y);
-        consumable = new Ellipse(x * SnakeGame.CELL_SIZE, y * SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
+        consumable = new Ellipse(x * SnakeGame1P.CELL_SIZE, y * SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
         consumable.setColor(Color.GREEN);
         consumable.fill();
-        apple = new Picture(x*SnakeGame.CELL_SIZE, y*SnakeGame.CELL_SIZE-3, "assets/Apple1.png");
-        apple.grow(0.1,0.1);
-        apple.draw();
+        apple = new Picture(x* SnakeGame1P.CELL_SIZE, y* SnakeGame1P.CELL_SIZE-4, "assets/Apple1.png");
     }
 
     public void hide() {

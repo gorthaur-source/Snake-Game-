@@ -1,9 +1,9 @@
-package org.academiadecodigo.tailormoons.snake;
+package org.academiadecodigo.tailormoons.snake.SnakeGrid;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
+import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 
 import java.util.Random;
 
@@ -11,9 +11,9 @@ public class SnakeGridNormal implements SnakeGrid {
 
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static final int ROWS = 40;
-    public static final int COLS = 80;
-    private Snake snake;
+    private static int ROWS;
+    private static int COLS;
+    private Snake[] snake = new Snake[2];
     private Consumable food;
 
     public SnakeGridNormal() {
@@ -21,8 +21,9 @@ public class SnakeGridNormal implements SnakeGrid {
 
 
     @Override
-    public void initGrid() {
-
+    public void initGrid(int rows, int columns) {
+        ROWS = rows;
+        COLS = columns;
         Rectangle gridRect = new Rectangle(PADDING, PADDING, COLS * CELL_SIZE, ROWS * CELL_SIZE);
         gridRect.setColor(Color.BLACK);
         gridRect.fill();
@@ -36,7 +37,7 @@ public class SnakeGridNormal implements SnakeGrid {
             x = new Random().nextInt(COLS);
             y = new Random().nextInt(ROWS);
             food = new Consumable(x, y);
-        } while (snake.snakeOnFood(food));
+        } while (snake[0].snakeOnFood(food));
         food.show();
     }
 
@@ -47,20 +48,23 @@ public class SnakeGridNormal implements SnakeGrid {
 
     public void checkCollision(){
 
-        int headX=snake.getHead().getX();
-        int headY=snake.getHead().getY();
+        int headX=snake[0].getHead().getX();
+        int headY=snake[0].getHead().getY();
 
-        for(int i=1;i<snake.getLength(); i++){
-            if (snake.getSnakeBody().get(i).getY() == headY && snake.getSnakeBody().get(i).getX() == headX) {
-                snake.setIsDead();
+        for(int i=1;i<snake[0].getLength(); i++){
+            if (snake[0].getSnakeBody().get(i).getY() == headY && snake[0].getSnakeBody().get(i).getX() == headX) {
+                snake[0].setIsDead();
                 break;
             }
         }
     }
 
     @Override
-    public void setSnake(Snake snake) {
-        this.snake = snake;
+    public void setSnake(Snake[] snakes) {
+        snake[0] = snakes[0];
+        if(snake[1] != null) {
+            snake[1] = snakes[1];
+        }
     }
 
 }

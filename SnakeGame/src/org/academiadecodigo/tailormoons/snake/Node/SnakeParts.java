@@ -1,11 +1,10 @@
 package org.academiadecodigo.tailormoons.snake.Node;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
-import org.academiadecodigo.tailormoons.snake.SnakeGame;
+import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.tailormoons.snake.Direction;
-import org.academiadecodigo.tailormoons.snake.Snake;
 
 public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node {
 
@@ -20,7 +19,7 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
         super(x, y);
         direction = Direction.UP;
         previousDirection= Direction.UP;
-        figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
+        figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
         figure.setColor(Color.GREEN);
         figure.fill();
 
@@ -45,51 +44,51 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
         switch (direction) {
             case LEFT:
                 if (x == 0) {
-                    x = SnakeGame.COLS - 1;
+                    x = SnakeGame1P.COLS - 1;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     return;
                 }
                 x--;
-                figure.translate(-SnakeGame.CELL_SIZE, 0);
+                figure.translate(-SnakeGame1P.CELL_SIZE, 0);
                 break;
             case DOWN:
-                if (y == SnakeGame.ROWS - 1) {
+                if (y == SnakeGame1P.ROWS - 1) {
                     y = 0;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     return;
                 }
                 y++;
-                figure.translate(0, SnakeGame.CELL_SIZE);
+                figure.translate(0, SnakeGame1P.CELL_SIZE);
                 break;
             case UP:
                 if (y == 0) {
-                    y = SnakeGame.ROWS - 1;
+                    y = SnakeGame1P.ROWS - 1;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     return;
                 }
                 y--;
-                figure.translate(0, -SnakeGame.CELL_SIZE);
+                figure.translate(0, -SnakeGame1P.CELL_SIZE);
                 break;
             case RIGHT:
-                if (x == SnakeGame.COLS - 1) {
+                if (x == SnakeGame1P.COLS - 1) {
                     x = 0;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     return;
                 }
                 x++;
-                figure.translate(SnakeGame.CELL_SIZE, 0);
+                figure.translate(SnakeGame1P.CELL_SIZE, 0);
                 break;
         }
     }
@@ -122,6 +121,7 @@ public class SnakeParts extends org.academiadecodigo.tailormoons.snake.Node.Node
     public void setNextDirection(Direction direction) {
         nextDirection = direction;
     }
+
     public void setDirection(Direction direction) {
         if (this.direction.isOpposite(direction)) {
             return;
