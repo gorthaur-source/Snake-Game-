@@ -6,6 +6,7 @@ import org.academiadecodigo.tailormoons.snake.Direction;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
+import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 
 import java.util.LinkedList;
 
@@ -16,14 +17,28 @@ public class Snake {
     private boolean isDead = false;
     private boolean growing;
     private boolean directionChanged;
-    private SnakeGrid grid;
     private double speed = 2;
 
 
-    public Snake(SnakeGrid grid) {
-        this.grid = grid;
+    public Snake(int typeOfSnake) {
         snakeBody = new LinkedList<>();
-
+        switch (typeOfSnake){
+            case 1:
+                for(int i=0;i<length;i++){
+                    snakeBody.add(new SnakeParts(SnakeGridNormal.COLS/2,SnakeGridNormal.ROWS/2+i));
+                }
+                break;
+            case 2:
+                for(int i=0;i<length;i++){
+                    snakeBody.add(new SnakeParts((SnakeGridNormal.COLS/6),SnakeGridNormal.ROWS/2+i) );
+                }
+                break;
+            case 3:
+                for(int i=0;i<length;i++){
+                    snakeBody.add(new SnakeParts(((SnakeGridNormal.COLS/6)*5),SnakeGridNormal.ROWS/2+i));
+                }
+                break;
+        }
     }
 
 

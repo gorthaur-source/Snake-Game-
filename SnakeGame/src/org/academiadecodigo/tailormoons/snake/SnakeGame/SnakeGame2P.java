@@ -9,6 +9,7 @@ import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
+import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 
 import java.util.Random;
 
@@ -18,18 +19,16 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
     private SnakeGrid grid;
     public static final int PADDING = 0;
     public static final int CELL_SIZE = 20;
-    public static final int ROWS = 40;
-    public static final int COLS = 60;
     //
     protected static int delay = 120;
     private int scoreOne;
     private int scoreTwo;
     private Text scoreTextOne = new Text(5, 2, "Player one score: " + scoreOne);
-    private Text scoreTextTwo = new Text((COLS-8) * CELL_SIZE, 2, "Player two score: "+ scoreTwo);
+    private Text scoreTextTwo = new Text((SnakeGridNormal.COLS-8) * CELL_SIZE, 2, "Player two score: "+ scoreTwo);
     private Snake playerOne;
     private Snake playerTwo;
     private Consumable food;
-    private boolean[][] isCovered = new boolean[COLS][ROWS];
+    private boolean[][] isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
 
     public SnakeGame2P(SnakeGrid grid) {
         this.grid = grid;
@@ -39,6 +38,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
     public void init() {
         grid.initGrid();
         isCovered = grid.getIsCovered();
+        snakeInit();
         scoreTextOne.setColor(Color.RED);
         scoreTextTwo.setColor(Color.RED);
         scoreTextOne.draw();
@@ -47,13 +47,19 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     }
 
+    public void snakeInit() {
+        playerOne = new Snake(2);
+        playerTwo = new Snake(3);
+    }
     public void start() throws InterruptedException {
 
         while (!isGameOver()) {
 
             Thread.sleep((long) (delay/playerOne.getSpeed()));
             playerOne.move();
-            playerOne.move();
+            checkCollision();
+            playerTwo.move();
+            checkCollision();
             if (snakeHasEaten(playerOne)) {
                 scoreOne += 100;
                 updateScore();
@@ -85,7 +91,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     public void updateScoreTwo() {
         scoreTextTwo.delete();
-        scoreTextTwo = new Text(5, 2, "Score: " + scoreTwo);
+        scoreTextTwo = new Text((SnakeGridNormal.COLS-8) * CELL_SIZE, 2, "Player two score: "+ scoreTwo);
         scoreTextTwo.setColor(Color.RED);
         scoreTextTwo.draw();
 
@@ -118,7 +124,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
             playerTwo.setDirectionChanged(true);
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_A: {
-                    playerOne.changeDirection(Direction.LEFT);
+                    playerTwo.changeDirection(Direction.LEFT);
                     break;
                 }
                 case KeyboardEvent.KEY_D: {
@@ -160,13 +166,19 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
                 headX--;
                 break;
         }
+        if (headX < 0 || headX >= SnakeGridNormal.COLS || headY < 0 || headY >= SnakeGridNormal.ROWS) {
+            return;
+        }
+        if (isCovered[headX][headY]) {
+            snake.setIsDead();
+        }
     }
 
     public void createFood() {
         int x, y;
         do {
-            x = new Random().nextInt(COLS);
-            y = new Random().nextInt(ROWS);
+            x = new Random().nextInt(SnakeGridNormal.COLS);
+            y = new Random().nextInt(SnakeGridNormal.ROWS);
             food = new Consumable(x, y);
         } while (playerOne.snakeOnFood(food) || playerTwo.snakeOnFood(food) || isCovered[x][y]);
         food.show();

@@ -42,13 +42,11 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
 
     }
 
-
-    public Consumable getFood() {
-        return food;
+    public void snakeInit() {
+        snake = new Snake(1);
     }
 
-
-    public void checkCollisionSnake() {
+    public void checkCollision() {
         int headX = snake.getHead().getX();
         int headY = snake.getHead().getY();
 
@@ -72,6 +70,12 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
                 headX--;
                 break;
         }
+        if (headX < 0 || headX >= SnakeGridNormal.COLS || headY < 0 || headY >= SnakeGridNormal.ROWS) {
+            return;
+        }
+        if (isCovered[headX][headY]) {
+            snake.setIsDead();
+        }
     }
 
     public void createFood() {
@@ -88,6 +92,8 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
 
     public void init() {
         grid.initGrid();
+        snakeInit();
+        isCovered = grid.getIsCovered();
         createFood();
     }
 
@@ -97,6 +103,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
         while (!isGameOver()) {
                 Thread.sleep((long) (delay/snake.getSpeed()));
                 snake.move();
+                checkCollision();
             if (snakeHasEaten(snake)) {
                 score += 100;
                 updateScore();
