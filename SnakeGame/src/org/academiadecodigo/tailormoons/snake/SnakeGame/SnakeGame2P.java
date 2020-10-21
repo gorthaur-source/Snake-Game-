@@ -1,5 +1,6 @@
 package org.academiadecodigo.tailormoons.snake.SnakeGame;
 
+import org.academiadecodigo.bootcamp.Sound;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
@@ -11,6 +12,7 @@ import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 
+import javax.sound.sampled.Clip;
 import java.util.Random;
 
 public class SnakeGame2P implements SnakeGame, KeyHandler {
@@ -24,14 +26,37 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
     private int scoreOne;
     private int scoreTwo;
     private Text scoreTextOne = new Text(5, 2, "Player one score: " + scoreOne);
-    private Text scoreTextTwo = new Text((SnakeGridNormal.COLS-8) * CELL_SIZE, 2, "Player two score: "+ scoreTwo);
+    private Text scoreTextTwo = new Text((SnakeGridNormal.COLS - 8) * CELL_SIZE, 2, "Player two score: " + scoreTwo);
     private Snake playerOne;
     private Snake playerTwo;
+    private Snake winner;
     private Consumable food;
     private boolean[][] isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
+    private Sound music;
+    private String filePathMusic;
 
     public SnakeGame2P(SnakeGrid grid) {
         this.grid = grid;
+        int randomMusic = (int) (Math.random() * 4);
+        switch (randomMusic) {
+            case 0:
+                filePathMusic = "/assets/Sounds/Music/1.wav";
+                break;
+            case 1:
+                filePathMusic = "/assets/Sounds/Music/2.wav";
+                break;
+            case 2:
+                filePathMusic = "/assets/Sounds/Music/3.wav";
+                break;
+            case 3:
+                filePathMusic = "/assets/Sounds/Music/4.wav";
+                break;
+        }
+
+        System.out.println(filePathMusic);
+        music = new Sound(filePathMusic);
+        music.play(true);
+
 
     }
 
@@ -51,13 +76,13 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
         playerOne = new Snake(2);
         playerTwo = new Snake(3);
     }
+
     public void start() throws InterruptedException {
 
         while (!isGameOver()) {
 
-            Thread.sleep((long) (delay/playerOne.getSpeed()));
+            Thread.sleep((long) (delay / playerOne.getSpeed()));
             playerOne.move();
-            checkCollision();
             playerTwo.move();
             checkCollision();
             if (snakeHasEaten(playerOne)) {
@@ -66,8 +91,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
                 playerOne.grow();
                 food.hide();
                 createFood();
-            }
-            else if (snakeHasEaten(playerTwo)) {
+            }if (snakeHasEaten(playerTwo)) {
                 scoreTwo += 100;
                 updateScoreTwo();
                 playerTwo.grow();
@@ -91,7 +115,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     public void updateScoreTwo() {
         scoreTextTwo.delete();
-        scoreTextTwo = new Text((SnakeGridNormal.COLS-8) * CELL_SIZE, 2, "Player two score: "+ scoreTwo);
+        scoreTextTwo = new Text((SnakeGridNormal.COLS - 8) * CELL_SIZE, 2, "Player two score: " + scoreTwo);
         scoreTextTwo.setColor(Color.RED);
         scoreTextTwo.draw();
 
@@ -99,7 +123,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     @Override
     public void pressed(KeyboardEvent e) {
-        if(!playerOne.isDirectionChanged()) {
+        if (!playerOne.isDirectionChanged()) {
             playerOne.setDirectionChanged(true);
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_LEFT: {
@@ -120,7 +144,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
                 }
             }
         }
-        if(!playerTwo.isDirectionChanged()) {
+        if (!playerTwo.isDirectionChanged()) {
             playerTwo.setDirectionChanged(true);
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_A: {
@@ -142,6 +166,27 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
             }
         }
     }
+
+
+    public void checkCollisionsBetweenSnakes() {
+
+        for (int i = 1; i < playerOne.getLength(); i++) {
+            if (playerTwo.getHead().getX() == playerOne.getSnakeBody().get(i).getX() && playerTwo.getHead().getY() == playerOne.getSnakeBody().get(i).getY()) {
+                playerTwo.setIsDead();
+            }
+        }
+        for (int i = 1; i < playerTwo.getLength(); i++) {
+            if (playerOne.getHead().getX() == playerTwo.getSnakeBody().get(i).getX() && playerOne.getHead().getY() == playerTwo.getSnakeBody().get(i).getY()) {
+                playerTwo.setIsDead();
+            }
+        }
+        if (playerOne.getHead().getX() == playerTwo.getHead().getX() && playerOne.getHead().getY() == playerTwo.getHead().getY()) {
+            playerTwo.setIsDead();
+            playerOne.setIsDead();
+        }
+
+    }
+
     public void checkCollisionSnake(Snake snake) {
         int headX = snake.getHead().getX();
         int headY = snake.getHead().getY();
@@ -183,16 +228,17 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
         } while (playerOne.snakeOnFood(food) || playerTwo.snakeOnFood(food) || isCovered[x][y]);
         food.show();
     }
-    public void checkCollision(){
+
+    public void checkCollision() {
         checkCollisionSnake(playerOne);
         checkCollisionSnake(playerTwo);
+        checkCollisionsBetweenSnakes();
     }
+
     public boolean snakeHasEaten(Snake snake) {
-        SnakeParts head = playerOne.getSnakeBody().getFirst();
+        SnakeParts head = snake.getSnakeBody().getFirst();
         return Math.abs(head.getX() - food.getX()) + Math.abs(head.getY() - food.getY()) == 0;
     }
-
-
 
 
 }

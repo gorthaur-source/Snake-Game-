@@ -1,5 +1,6 @@
 package org.academiadecodigo.tailormoons.snake.SnakeGame;
 
+import org.academiadecodigo.bootcamp.Sound;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
@@ -15,6 +16,7 @@ import org.academiadecodigo.tailormoons.snake.Snake.Snake;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGrid;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class SnakeGame1P implements SnakeGame, KeyHandler {
@@ -33,12 +35,38 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
     private int score;
     private Text scoreText = new Text(5, 2, "Score: " + score);
     private boolean[][] isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
+  //  private Sound eat = new Sound("/assets/Sounds/eat.wav");
+  //  private Sound die = new Sound("/assets/Sounds/die.wav");
+    private Sound music;
+    private String filePathMusic;
 
 
     public SnakeGame1P(SnakeGrid grid) {
         this.grid = grid;
         scoreText.setColor(Color.RED);
         scoreText.draw();
+        int randomMusic = (int) (Math.random() * 4);
+
+        switch(randomMusic) {
+            case 0:
+                filePathMusic = "/assets/Sounds/Music/1.wav";
+                break;
+            case 1:
+                filePathMusic = "/assets/Sounds/Music/2.wav";
+                break;
+            case 2:
+                filePathMusic = "/assets/Sounds/Music/3.wav";
+                break;
+            case 3:
+                filePathMusic = "/assets/Sounds/Music/4.wav";
+                break;
+        }
+
+        System.out.println(filePathMusic);
+        music = new Sound(filePathMusic);
+        music.play(true);
+
+
 
     }
 
@@ -105,6 +133,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
                 snake.move();
                 checkCollision();
             if (snakeHasEaten(snake)) {
+               // eat.play(true);
                 score += 100;
                 updateScore();
                 snake.grow();
@@ -116,6 +145,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
 
     public boolean isGameOver() {
         if (snake.isDead()) {
+         //   die.play(true);
             return true;
         }
         return false;

@@ -24,34 +24,40 @@ public class SnakeGridObstacles implements SnakeGrid {
 
     @Override
     public void initGrid() {
-        int zeroToFour = (int) (Math.random() * 5);
 
-        switch(zeroToFour) {
+        int zeroToFive = (int) (Math.random() * 6);
+
+        switch(zeroToFive) {
             case 0:
-                filePath = "assets/Backgrounds/earth.png";
-                break;
-            case 1:
                 filePath = "assets/Backgrounds/space.png";
                 break;
-            case 2:
+            case 1:
                 filePath = "assets/Backgrounds/space1.jpg";
                 break;
-            case 3:
+            case 2:
                 filePath = "assets/Backgrounds/lightspeed.jpg";
                 break;
-            case 4:
+            case 3:
                 filePath = "assets/Backgrounds/shady.jpg";
+                break;
+            case 4:
+                filePath = "assets/Backgrounds/hole.jpg";
+                break;
+            case 5:
+                filePath = "assets/Backgrounds/hole1.jpg";
+                break;
         }
 
         background = new Picture(PADDING, PADDING, filePath);
         background.draw();
         isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
         Rectangle[] rectanglesVertical = new Rectangle[35];
-
         for (int i = 0; i < SnakeGridNormal.ROWS - 5; i++) {
             rectanglesVertical[i] = new Rectangle((SnakeGridNormal.COLS / 4 * 3) * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE);
             rectanglesVertical[i].setColor(Color.GRAY);
             rectanglesVertical[i].fill();
+            Picture asteroidField = new Picture((SnakeGridNormal.COLS / 4 * 3), i * CELL_SIZE, "assets/Backgrounds/asteroidfield.jpg");
+            asteroidField.draw();
             isCovered[(SnakeGridNormal.COLS / 4) * 3][i] = true;
             rectanglesVertical[i] = new Rectangle((SnakeGridNormal.COLS / 4) * CELL_SIZE, ((SnakeGridNormal.ROWS - (SnakeGridNormal.ROWS - 5) + i) * CELL_SIZE), CELL_SIZE, CELL_SIZE);
             rectanglesVertical[i].setColor(Color.GRAY);
@@ -62,8 +68,8 @@ public class SnakeGridObstacles implements SnakeGrid {
         Rectangle[] rectanglesBox = new Rectangle[20];
 
         for (int i = 0; i < SnakeGridNormal.ROWS / 2; i++) {
-            rectanglesBox[i] = new Rectangle((SnakeGridNormal.COLS / 6 * 2) * CELL_SIZE, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-            rectanglesBox[i].setColor(Color.GRAY);
+           rectanglesBox[i] = new Rectangle((SnakeGridNormal.COLS / 6 * 2) * CELL_SIZE, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+           rectanglesBox[i].setColor(Color.GRAY);
             rectanglesBox[i].fill();
             isCovered[(SnakeGridNormal.COLS / 6 * 2)][(SnakeGridNormal.ROWS / 4 + i)] = true;
             rectanglesBox[i] = new Rectangle((SnakeGridNormal.COLS / 6 * 4) * CELL_SIZE, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, CELL_SIZE, CELL_SIZE);

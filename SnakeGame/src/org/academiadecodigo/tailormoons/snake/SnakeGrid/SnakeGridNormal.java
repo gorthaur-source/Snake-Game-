@@ -27,23 +27,26 @@ public class SnakeGridNormal implements SnakeGrid {
     @Override
     public void initGrid() {
 
-        int zeroToFour = (int) (Math.random() * 5);
+        int zeroToFive = (int) (Math.random() * 6);
 
-        switch(zeroToFour) {
+        switch(zeroToFive) {
             case 0:
-                filePath = "assets/Backgrounds/earth.jpg";
-                break;
-            case 1:
                 filePath = "assets/Backgrounds/space.png";
                 break;
-            case 2:
+            case 1:
                 filePath = "assets/Backgrounds/space1.jpg";
                 break;
-            case 3:
+            case 2:
                 filePath = "assets/Backgrounds/lightspeed.jpg";
                 break;
-            case 4:
+            case 3:
                 filePath = "assets/Backgrounds/shady.jpg";
+            case 4:
+                filePath = "assets/Backgrounds/hole.jpg";
+                break;
+            case 5:
+                filePath = "assets/Backgrounds/hole1.jpg";
+                break;
         }
 
         background = new Picture(PADDING, PADDING, filePath);

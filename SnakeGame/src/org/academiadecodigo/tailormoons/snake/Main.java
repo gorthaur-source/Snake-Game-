@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
 
-        SnakeGame1P game = new SnakeGame1P(new SnakeGridObstacles());
+        SnakeGame2P game = new SnakeGame2P(new SnakeGridObstacles());
 
         OurKeyboardHandler ourKeyboard = new OurKeyboardHandler();
         Keyboard keyboard = new Keyboard(ourKeyboard);
