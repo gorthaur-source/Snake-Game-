@@ -23,7 +23,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
     // grid stuff
     private SnakeGrid grid;
     public static final int PADDING = 0;
-    public static final int CELL_SIZE = 20;
+    public static final int CELL_SIZE = 23;
 
 
     //

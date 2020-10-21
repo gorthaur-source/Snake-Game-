@@ -18,7 +18,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
     // grid stuff
     private SnakeGrid grid;
     public static final int PADDING = 0;
-    public static final int CELL_SIZE = 20;
+    public static final int CELL_SIZE = 23;
     //
     protected static int delay = 120;
     private int scoreOne;

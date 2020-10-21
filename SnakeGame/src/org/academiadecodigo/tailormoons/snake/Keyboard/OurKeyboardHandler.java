@@ -13,7 +13,6 @@ public class OurKeyboardHandler implements KeyboardHandler {
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
-        System.out.println("Hello");
         keyHandling.pressed(keyboardEvent);
     }
 
