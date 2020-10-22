@@ -1,11 +1,7 @@
 package org.academiadecodigo.tailormoons.snake.Keyboard;
 
-import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
-
-import java.awt.event.KeyEvent;
 
 public class OurKeyboardHandler implements KeyboardHandler {
 
@@ -13,7 +9,11 @@ public class OurKeyboardHandler implements KeyboardHandler {
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
-        keyHandling.pressed(keyboardEvent);
+        try {
+            keyHandling.pressed(keyboardEvent);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
