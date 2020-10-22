@@ -120,8 +120,8 @@ public class StartMenu implements KeyHandler {
                     player1Button.draw();
                     player2ButtonSelected.draw();
                     player2Button.delete();
-                    isPlayer2Selected = true;
                     isPlayer1Selected = false;
+                    isPlayer2Selected = true;
                     break;
                 } else if (isNoobSelected) {
                     isNoobSelected = false;
@@ -136,11 +136,13 @@ public class StartMenu implements KeyHandler {
                 if (isScoreButtonSelected) {
                     scoresButtonSelected.delete();
                     exitButtonSelected.draw();
-                    isExitButtonSelected = true;
+                    startButtonSelected.draw();
                     isScoreButtonSelected = false;
+                    isStartButtonSelected = true;
                     break;
 
                 } else if (isExitButtonSelected) {
+                    startButton.delete();
                     exitButtonSelected.delete();
                     startButtonSelected.draw();
                     isExitButtonSelected = false;
@@ -161,6 +163,13 @@ public class StartMenu implements KeyHandler {
                     noObstacles.delete();
                     noObstaclesSelected.draw();
                     isNoobSelected = true;
+                    break;
+                } else if (isStartButtonSelected) {
+                    break;
+                } else if (isPlayer1Selected) {
+                    break;
+                } else if (isNoobSelected) {
+                    break;
                 }
 
             case KeyboardEvent.KEY_SPACE:
@@ -200,44 +209,51 @@ public class StartMenu implements KeyHandler {
                     if (playerType == 1) {
                         SnakeGame game = new SnakeGame1P(new SnakeGridNormal());
                         handler.setKeyHandling((KeyHandler) game);
-                        game.init();
-                        game.start();
                         obstaclesSelected.delete();
                         noObstaclesSelected.delete();
                         picture.delete();
                         snakeLogo.delete();
+                        music.close();
+                        game.init();
+                        game.start();
                         break;
                     } else if (playerType == 2) {
                         SnakeGame game = new SnakeGame2P(new SnakeGridNormal());
                         handler.setKeyHandling((KeyHandler) game);
-                        game.init();
-                        game.start();
                         obstaclesSelected.delete();
                         noObstaclesSelected.delete();
                         picture.delete();
                         snakeLogo.delete();
+                        music.close();
+                        game.init();
+                        game.start();
+
                         break;
                     }
                 } else if (isObstaclesSelected) {
                     if (playerType == 1) {
                         SnakeGame game = new SnakeGame1P(new SnakeGridObstacles());
                         handler.setKeyHandling((KeyHandler) game);
-                        game.init();
-                        game.start();
                         obstaclesSelected.delete();
                         noObstacles.delete();
                         picture.delete();
                         snakeLogo.delete();
+                        music.close();
+                        game.init();
+                        game.start();
+
                         break;
                     } else if (playerType == 2) {
                         SnakeGame game = new SnakeGame2P(new SnakeGridObstacles());
-                        handler.setKeyHandling((KeyHandler) game);
-                        game.init();
-                        game.start();
                         obstaclesSelected.delete();
                         noObstacles.delete();
                         picture.delete();
                         snakeLogo.delete();
+                        music.close();
+                        game.init();
+                        handler.setKeyHandling((KeyHandler) game);
+                        game.start();
+
                         break;
                     }
                 }

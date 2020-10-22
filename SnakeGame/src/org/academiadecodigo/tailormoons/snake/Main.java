@@ -26,13 +26,13 @@ public class Main {
 
         KeyboardEvent right = new KeyboardEvent();
         right.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        right.setKey(KeyboardEvent.KEY_UP);
+        right.setKey(KeyboardEvent.KEY_RIGHT);
 
         keyboard.addEventListener(right);
 
         KeyboardEvent up = new KeyboardEvent();
         up.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        up.setKey(KeyboardEvent.KEY_RIGHT);
+        up.setKey(KeyboardEvent.KEY_UP);
 
         keyboard.addEventListener(up);
 
@@ -70,6 +70,7 @@ public class Main {
         left.setKey(KeyboardEvent.KEY_SPACE);
 
         keyboard.addEventListener(space);
+
         StartMenu startMenu = new StartMenu(ourKeyboard);
 
         ourKeyboard.setKeyHandling(startMenu);
