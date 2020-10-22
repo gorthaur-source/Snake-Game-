@@ -146,6 +146,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
         }
         if (!playerTwo.isDirectionChanged()) {
             playerTwo.setDirectionChanged(true);
+            System.out.println("sup");
             switch (e.getKey()) {
                 case KeyboardEvent.KEY_A: {
                     playerTwo.changeDirection(Direction.LEFT);

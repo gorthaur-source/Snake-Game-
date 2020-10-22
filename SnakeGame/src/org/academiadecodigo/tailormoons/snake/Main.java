@@ -4,6 +4,7 @@ import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.tailormoons.snake.Keyboard.OurKeyboardHandler;
+import org.academiadecodigo.tailormoons.snake.Menu.StartMenu;
 import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame2P;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
@@ -64,14 +65,21 @@ public class Main {
         downTwo.setKey(KeyboardEvent.KEY_S);
         keyboard.addEventListener(downTwo);
 
-        SnakeGame2P game = new SnakeGame2P(new SnakeGridObstacles());
-        ourKeyboard.setKeyHandling(game);
+        KeyboardEvent space = new KeyboardEvent();
+        left.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        left.setKey(KeyboardEvent.KEY_SPACE);
+
+        keyboard.addEventListener(space);
+        StartMenu startMenu = new StartMenu(ourKeyboard);
+
+        ourKeyboard.setKeyHandling(startMenu);
 
 
 
-        game.init();
-        game.start();
 
+     //   game.init();
+     //   game.start();
+        startMenu.init();
 
 
     }

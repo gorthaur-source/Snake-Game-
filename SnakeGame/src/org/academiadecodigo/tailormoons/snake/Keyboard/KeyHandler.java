@@ -6,5 +6,5 @@ import java.awt.event.KeyEvent;
 
 public interface KeyHandler {
 
-    void pressed(KeyboardEvent e);
+    void pressed(KeyboardEvent e) throws InterruptedException;
 }
