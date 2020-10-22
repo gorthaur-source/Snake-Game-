@@ -18,24 +18,41 @@ public class Snake {
     private boolean growing;
     private boolean directionChanged;
     private double speed = 2;
+    private boolean hasMoved;
 
 
     public Snake(int typeOfSnake) {
         snakeBody = new LinkedList<>();
-        switch (typeOfSnake){
+        switch (typeOfSnake) {
             case 1:
-                for(int i=0;i<length;i++){
-                    snakeBody.add(new SnakeParts(SnakeGridNormal.COLS/2,SnakeGridNormal.ROWS/2+i));
+                for (int i = 0; i < length; i++) {
+                    if (i == 0) {
+                        snakeBody.add(new SnakeParts(SnakeGridNormal.COLS / 2, SnakeGridNormal.ROWS / 2 + i,  "head"));
+                        continue;
+                    }
+                    if (i == length - 1) {
+                        snakeBody.add(new SnakeParts(SnakeGridNormal.COLS / 2, SnakeGridNormal.ROWS / 2 + i,  "tail"));
+                        continue;
+                    }
+                    snakeBody.add(new SnakeParts(SnakeGridNormal.COLS / 2, SnakeGridNormal.ROWS / 2 + i));
                 }
                 break;
             case 2:
-                for(int i=0;i<length;i++){
-                    snakeBody.add(new SnakeParts((SnakeGridNormal.COLS/6),SnakeGridNormal.ROWS/2+i) );
+                for (int i = 0; i < length; i++) {
+                    if (i == 0) {
+                        snakeBody.add(new SnakeParts(SnakeGridNormal.COLS / 2, SnakeGridNormal.ROWS / 2 + i,  "head"));
+                        continue;
+                    }
+                    snakeBody.add(new SnakeParts((SnakeGridNormal.COLS / 6), SnakeGridNormal.ROWS / 2 + i));
                 }
                 break;
             case 3:
-                for(int i=0;i<length;i++){
-                    snakeBody.add(new SnakeParts(((SnakeGridNormal.COLS/6)*5),SnakeGridNormal.ROWS/2+i));
+                for (int i = 0; i < length; i++) {
+                    if (i == 0) {
+                        snakeBody.add(new SnakeParts(SnakeGridNormal.COLS / 2, SnakeGridNormal.ROWS / 2 + i,  "head"));
+                        continue;
+                    }
+                    snakeBody.add(new SnakeParts(((SnakeGridNormal.COLS / 6) * 5), SnakeGridNormal.ROWS / 2 + i));
                 }
                 break;
         }
@@ -50,112 +67,68 @@ public class Snake {
 
         directionChanged = false;
 
-            if (growing) {
+        if (growing) {
 
-                SnakeParts temp = snakeBody.get(length - 2);
+            SnakeParts temp = snakeBody.get(length - 2);
 
-                snakeBody.add(length - 1, new SnakeParts(temp.getX(), temp.getY()));
-                length++;
+            snakeBody.add(length - 1, new SnakeParts(temp.getX(), temp.getY()));
+            length++;
 
-                snakeBody.get(length - 2).copyDirection(temp);
-                snakeBody.get(length - 2).setColor(Color.RED);
+            snakeBody.get(length - 2).copyDirection(temp);
+            snakeBody.get(length-2).updateSprites();
+            //snakeBody.get(length - 2).setColor(Color.RED);
 
-                for (int i = 0; i < length - 2; i++) {
-                    snakeBody.get(i).moveInDirection();
-
-                }
-
-                snakeBody.get(0).setPreviousDirection(snakeBody.get(0).getDirection());
-
-                for (int i = 1; i < length - 2; i++) {
-                    snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
-                    snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
-                }
-
-                growing = false;
-                return;
-            }
-
-            for (int i = 0; i < length; i++) {
-                snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
+            for (int i = 0; i < length - 2; i++) {
+                snakeBody.get(i).updateSprites();
                 snakeBody.get(i).moveInDirection();
 
-                if (snakeBody.get(i) == getHead()) {
-                    continue;
-                }
-                try {
-                    snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
-                } catch (IndexOutOfBoundsException e) {
-                    snakeBody.get(i).setDirection(snakeBody.get(i - 1), getHead());
-                }
-
             }
 
-    }
+            snakeBody.get(0).setPreviousDirection(snakeBody.get(0).getDirection());
 
-    public void updateSprites(SnakeParts bodyPart) {
-
-        //head cases
-        if(bodyPart == snakeBody.get(0)) {
-            if (bodyPart.getPreviousDirection() == Direction.LEFT) {
-                bodyPart.updateSprite("assets/snakeHeadLeft");
-            } else if (bodyPart.getPreviousDirection() == Direction.RIGHT) {
-                bodyPart.updateSprite("assets/snakeHeadRight");
-            } else if (bodyPart.getPreviousDirection() == Direction.UP) {
-                bodyPart.updateSprite("assets/snakeHeadUp");
-            } else if (bodyPart.getPreviousDirection() == Direction.DOWN) {
-                bodyPart.updateSprite("assets/snakeHeadDown");
+            for (int i = 1; i < length - 2; i++) {
+                snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
+                snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
             }
+            growing = false;
+            return;
         }
-        //tail cases
-        else if (bodyPart == snakeBody.get(length-1)) {
-            if (bodyPart.getNextDirection() == Direction.LEFT) {
-                bodyPart.updateSprite("assets/snakeTailLeft");
-            } else if (bodyPart.getNextDirection() == Direction.RIGHT) {
-                bodyPart.updateSprite("assets/snakeTailRight");
-            } else if (bodyPart.getNextDirection() == Direction.UP) {
-                bodyPart.updateSprite("assets/snakeTailUp");
-            } else if (bodyPart.getNextDirection() == Direction.DOWN) {
-                bodyPart.updateSprite("assets/snakeTailDown");
-            }
-        }
-        //body cases: might be possible to shrink this
-        else {
-            if (bodyPart.getPreviousDirection() == Direction.LEFT) {
-                if (bodyPart.getNextDirection() == Direction.LEFT) {
-                    bodyPart.updateSprite("assets/snakeBodyHorizontal");
-                } else if (bodyPart.getNextDirection() == Direction.DOWN) {
-                    bodyPart.updateSprite("assets/snakeBodyLeftDown");
-                } else if (bodyPart.getNextDirection() == Direction.UP) {
-                    bodyPart.updateSprite("assets/snakeBodyLeftUp");
-                }
-            }else if (bodyPart.getPreviousDirection() == Direction.RIGHT) {
-                if (bodyPart.getNextDirection() == Direction.RIGHT) {
-                    bodyPart.updateSprite("assets/snakeBodyHorizontal");
-                } else if (bodyPart.getNextDirection() == Direction.DOWN) {
-                    bodyPart.updateSprite("assets/snakeBodyRightDown");
-                } else if (bodyPart.getNextDirection() == Direction.UP) {
-                    bodyPart.updateSprite("assets/snakeBodyRightUp");
-                }
-            } else if (bodyPart.getPreviousDirection() == Direction.DOWN) {
-                if (bodyPart.getNextDirection() == Direction.DOWN) {
-                    bodyPart.updateSprite("assets/snakeBodyVertical");
-                } else if (bodyPart.getNextDirection() == Direction.LEFT) {
-                    bodyPart.updateSprite("assets/snakeBodyRightUp");
-                } else if (bodyPart.getNextDirection() == Direction.RIGHT) {
-                    bodyPart.updateSprite("assets/snakeBodyLeftUp");
-                }
-            } else {
-                if (bodyPart.getNextDirection() == Direction.UP) {
-                    bodyPart.updateSprite("assets/snakeBodyVertical");
-                } else if (bodyPart.getNextDirection() == Direction.LEFT) {
-                    bodyPart.updateSprite("assets/snakeBodyRightDown");
-                } else if (bodyPart.getNextDirection() == Direction.RIGHT) {
-                    bodyPart.updateSprite("assets/snakeBodyLeftDown");
 
-                }
+
+        for (int i = 0; i < length; i++) {
+
+            if(hasMoved){
+                snakeBody.get(i).updateSprites();
             }
+
+            snakeBody.get(i).setPreviousDirection(snakeBody.get(i).getDirection());
+
+
+
+
+
+            snakeBody.get(i).moveInDirection();
+
+
+
+
+            if (snakeBody.get(i) == getHead()) {
+
+                continue;
+            }
+
+            try {
+                snakeBody.get(i).setDirection(snakeBody.get(i - 1), snakeBody.get(i + 1));
+
+
+            } catch (IndexOutOfBoundsException e) {
+                snakeBody.get(i).setDirection(snakeBody.get(i - 1), null);
+            }
+
+
         }
+        hasMoved = true;
+
     }
 
     public boolean snakeOnFood(Consumable food) {
