@@ -60,7 +60,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     }
 
-    public void init() {
+    public void init() throws InterruptedException {
         grid.initGrid();
         isCovered = grid.getIsCovered();
         snakeInit();
@@ -107,7 +107,7 @@ public class SnakeGame2P implements SnakeGame, KeyHandler {
 
     public void updateScore() {
         scoreTextOne.delete();
-        scoreTextOne = new Text(5, 2, "Score: " + scoreOne);
+        scoreTextOne = new Text(5, 2, "Player one score: " + scoreOne);
         scoreTextOne.setColor(Color.RED);
         scoreTextOne.draw();
 

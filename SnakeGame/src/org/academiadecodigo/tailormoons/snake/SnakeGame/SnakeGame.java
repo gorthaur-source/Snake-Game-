@@ -11,7 +11,7 @@ public interface SnakeGame {
 
 
 
-    public void init();
+    public void init() throws InterruptedException;
 
 
     public void start() throws InterruptedException;

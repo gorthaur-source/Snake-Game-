@@ -13,7 +13,6 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
 
-        SnakeGame2P game = new SnakeGame2P(new SnakeGridObstacles());
 
         OurKeyboardHandler ourKeyboard = new OurKeyboardHandler();
         Keyboard keyboard = new Keyboard(ourKeyboard);
@@ -65,7 +64,7 @@ public class Main {
         downTwo.setKey(KeyboardEvent.KEY_S);
         keyboard.addEventListener(downTwo);
 
-
+        SnakeGame2P game = new SnakeGame2P(new SnakeGridObstacles());
         ourKeyboard.setKeyHandling(game);
 
 

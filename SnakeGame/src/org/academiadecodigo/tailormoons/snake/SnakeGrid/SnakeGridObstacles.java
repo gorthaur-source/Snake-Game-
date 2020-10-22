@@ -17,7 +17,7 @@ public class SnakeGridObstacles implements SnakeGrid {
     private boolean[][] isCovered;
     private Picture background;
     private String filePath;
-
+    private Picture flame;
     public SnakeGridObstacles() {
 
     }
@@ -51,35 +51,48 @@ public class SnakeGridObstacles implements SnakeGrid {
         background = new Picture(PADDING, PADDING, filePath);
         background.draw();
         isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
-        Rectangle[] rectanglesVertical = new Rectangle[35];
         for (int i = 0; i < SnakeGridNormal.ROWS - 5; i++) {
-            rectanglesVertical[i] = new Rectangle((SnakeGridNormal.COLS / 4 * 3) * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-            rectanglesVertical[i].setColor(Color.GRAY);
-            rectanglesVertical[i].fill();
-            Picture asteroidField = new Picture((SnakeGridNormal.COLS / 4 * 3), i * CELL_SIZE, "assets/Backgrounds/asteroidfield.jpg");
-            asteroidField.draw();
+            flame = new Picture(SnakeGridNormal.COLS / 4 * 3 * CELL_SIZE, i * CELL_SIZE, "assets/Flames/flame1.png");
+            flame.draw();
+        //    if(i<29) {
+          //      Picture asteroidField = new Picture((SnakeGridNormal.COLS / 4 * 3) * CELL_SIZE -1, i * CELL_SIZE, "assets/Backgrounds/asteroidfield2.png");
+           //     asteroidField.draw();
+           // }
             isCovered[(SnakeGridNormal.COLS / 4) * 3][i] = true;
-            rectanglesVertical[i] = new Rectangle((SnakeGridNormal.COLS / 4) * CELL_SIZE, ((SnakeGridNormal.ROWS - (SnakeGridNormal.ROWS - 5) + i) * CELL_SIZE), CELL_SIZE, CELL_SIZE);
-            rectanglesVertical[i].setColor(Color.GRAY);
-            rectanglesVertical[i].fill();
+         //   rectanglesVertical[i] = new Rectangle((SnakeGridNormal.COLS / 4) * CELL_SIZE, ((SnakeGridNormal.ROWS - (SnakeGridNormal.ROWS - 5) + i) * CELL_SIZE), CELL_SIZE, CELL_SIZE);
+          //  rectanglesVertical[i].setColor(Color.GRAY);
+          //  rectanglesVertical[i].fill();
+
+     //       if(i<30 && i > 0) {
+       //         Picture asteroidField = new Picture((SnakeGridNormal.COLS / 4) * CELL_SIZE - 2, ((SnakeGridNormal.ROWS - (SnakeGridNormal.ROWS - 4.4) + i)*CELL_SIZE), "assets/Backgrounds/asteroidfield2.png");
+         //       asteroidField.draw();
+           // }
+            flame = new Picture (((SnakeGridNormal.COLS / 4)) * CELL_SIZE, ((SnakeGridNormal.ROWS - (SnakeGridNormal.ROWS - 5)) + i)*CELL_SIZE, "assets/Flames/flame1.png");
+            flame.draw();
             isCovered[(SnakeGridNormal.COLS / 4)][(SnakeGridNormal.ROWS - (SnakeGridNormal.ROWS - 5)) + i] = true;
         }
 
-        Rectangle[] rectanglesBox = new Rectangle[20];
 
         for (int i = 0; i < SnakeGridNormal.ROWS / 2; i++) {
-           rectanglesBox[i] = new Rectangle((SnakeGridNormal.COLS / 6 * 2) * CELL_SIZE, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-           rectanglesBox[i].setColor(Color.GRAY);
-            rectanglesBox[i].fill();
+           // if(i<15) {
+             //   Picture asteroidField = new Picture((SnakeGridNormal.COLS / 6 * 2) * CELL_SIZE - 5, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, "assets/Backgrounds/asteroidfield2.png");
+               // asteroidField.draw();
+           // }
+
             isCovered[(SnakeGridNormal.COLS / 6 * 2)][(SnakeGridNormal.ROWS / 4 + i)] = true;
-            rectanglesBox[i] = new Rectangle((SnakeGridNormal.COLS / 6 * 4) * CELL_SIZE, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-            rectanglesBox[i].setColor(Color.GRAY);
-            rectanglesBox[i].fill();
+            flame = new Picture ((SnakeGridNormal.COLS / 6 * 2)*CELL_SIZE, ((SnakeGridNormal.ROWS / 4 + i)*CELL_SIZE),  "assets/Flames/flame10.png");
+            flame.draw();
+
+        //    if(i<15) {
+          //      Picture asteroidField = new Picture((SnakeGridNormal.COLS / 6 * 4) * CELL_SIZE - 5, (SnakeGridNormal.ROWS / 4 + i) * CELL_SIZE, "assets/Backgrounds/asteroidfield2.png");
+            //    asteroidField.draw();
+           // }
             isCovered[SnakeGridNormal.COLS / 6 * 4][(SnakeGridNormal.ROWS / 4 + i)] = true;
+            flame = new Picture((SnakeGridNormal.COLS / 6 * 4) * CELL_SIZE, (SnakeGridNormal.ROWS / 4 + i)*CELL_SIZE,  "assets/Flames/flame10.png");
+            flame.draw();
 
         }
     }
-
 
     public boolean[][] getIsCovered() {
         return isCovered;
