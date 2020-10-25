@@ -1,18 +1,12 @@
 package org.academiadecodigo.tailormoons.snake.Menu;
 
 import org.academiadecodigo.bootcamp.Sound;
-import org.academiadecodigo.simplegraphics.graphics.Color;
-import org.academiadecodigo.simplegraphics.graphics.Text;
-import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 import org.academiadecodigo.tailormoons.snake.Keyboard.KeyHandler;
 import org.academiadecodigo.tailormoons.snake.Keyboard.OurKeyboardHandler;
 import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame;
 import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
-import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame2P;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridObstacles;
 
@@ -49,13 +43,15 @@ public class StartMenu implements KeyHandler {
     private boolean isObstaclesSelected;
     private boolean isNoobSelected;
     private SnakeGame game;
-    private int playerType;
+    public int playerType;
     private Sound music;
     private String filePathMusic;
+    public int gameType;
+    private int selection;
+    Runnable games;
 
     public StartMenu(OurKeyboardHandler handler) {
         this.handler = handler;
-        //init();
 
         int randomMusic = (int) (Math.random() * 4);
 
@@ -77,7 +73,7 @@ public class StartMenu implements KeyHandler {
 
     }
 
-    public void init() {
+    public void init() throws InterruptedException {
 
 
         music.play(true);
@@ -90,13 +86,17 @@ public class StartMenu implements KeyHandler {
         //scores button
         scoresButton.draw();
 
-
         //instructions
  /*       Text text = new Text(630, 510, "Press Space Key to select");
         text.setColor(Color.RED);
         text.grow(85, 15);
         text.draw(); */
 
+    }
+
+
+    public int getSelection() {
+        return selection;
     }
 
     @Override
@@ -207,56 +207,43 @@ public class StartMenu implements KeyHandler {
                     break;
                 } else if (isNoobSelected) {
                     if (playerType == 1) {
-                        SnakeGame game = new SnakeGame1P(new SnakeGridNormal());
-                        handler.setKeyHandling((KeyHandler) game);
                         obstaclesSelected.delete();
                         noObstaclesSelected.delete();
                         picture.delete();
                         snakeLogo.delete();
                         music.close();
-                        game.init();
-                        game.start();
+                        gameType = 1;
                         break;
                     } else if (playerType == 2) {
-                        SnakeGame game = new SnakeGame2P(new SnakeGridNormal());
-                        handler.setKeyHandling((KeyHandler) game);
                         obstaclesSelected.delete();
                         noObstaclesSelected.delete();
                         picture.delete();
                         snakeLogo.delete();
                         music.close();
-                        game.init();
-                        game.start();
-
+                        gameType = 1;
                         break;
                     }
                 } else if (isObstaclesSelected) {
                     if (playerType == 1) {
-                        SnakeGame game = new SnakeGame1P(new SnakeGridObstacles());
-                        handler.setKeyHandling((KeyHandler) game);
                         obstaclesSelected.delete();
                         noObstacles.delete();
                         picture.delete();
                         snakeLogo.delete();
                         music.close();
-                        game.init();
-                        game.start();
-
+                        gameType = 2;
                         break;
                     } else if (playerType == 2) {
-                        SnakeGame game = new SnakeGame2P(new SnakeGridObstacles());
                         obstaclesSelected.delete();
                         noObstacles.delete();
                         picture.delete();
                         snakeLogo.delete();
                         music.close();
-                        game.init();
-                        handler.setKeyHandling((KeyHandler) game);
-                        game.start();
-
+                        gameType = 2;
                         break;
                     }
                 }
         }
     }
+
 }
+

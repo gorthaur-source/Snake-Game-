@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/SnakeGame/lib/SnakeSound.jar!/" />
+      <root url="jar://$PROJECT_DIR$/SnakeGame/lib/simplegraphics.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

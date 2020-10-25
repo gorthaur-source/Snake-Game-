@@ -18,7 +18,7 @@ public interface SnakeGame {
 
     public boolean isGameOver();
 
-    public void updateScore();
+    public void updateScore(int index);
 
     public boolean snakeHasEaten(Snake snake);
 
