@@ -10,11 +10,6 @@ import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridObstacles;
 
-<<<<<<< HEAD
-import java.awt.*;
-
-=======
->>>>>>> 843fee6c26235288ad5dbcad0ef17a8bdb9e297d
 
 public class StartMenu implements KeyHandler {
 

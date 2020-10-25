@@ -1,10 +1,7 @@
 package org.academiadecodigo.tailormoons.snake.Snake;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
-<<<<<<< HEAD
 
-=======
->>>>>>> 843fee6c26235288ad5dbcad0ef17a8bdb9e297d
 import org.academiadecodigo.tailormoons.snake.Direction;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
