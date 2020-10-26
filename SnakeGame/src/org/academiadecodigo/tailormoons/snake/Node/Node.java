@@ -1,6 +1,6 @@
 package org.academiadecodigo.tailormoons.snake.Node;
 
-public class Node {
+abstract public class Node {
 
     protected int x;
     protected int y;

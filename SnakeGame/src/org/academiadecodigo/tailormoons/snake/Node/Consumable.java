@@ -8,36 +8,22 @@ import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 public class Consumable extends Node{
 
     private Picture planet;
-    String filePath;
+    String[] BACKGROUNDS = {
+            "assets/Consumables/earth.png",
+            "assets/Consumables/saturn.png",
+            "assets/Consumables/weird.png",
+            "assets/Consumables/ice.png",
+            "assets/Consumables/moon.png",
+            "assets/Consumables/green.png",
+            "assets/Consumables/red.png"
+    };
 
     public Consumable(int x, int y) {
         super(x, y);
 
-        int zeroToSix = (int) (Math.random() * 7);
-        switch(zeroToSix) {
-            case 0:
-                filePath = "assets/Consumables/earth.png";
-                break;
-            case 1:
-                filePath = "assets/Consumables/saturn.png";
-                break;
-            case 2:
-                filePath = "assets/Consumables/weird.png";
-                break;
-            case 3:
-                filePath = "assets/Consumables/ice.png";
-                break;
-            case 4:
-                filePath = "assets/Consumables/moon.png";
-                break;
-            case 5:
-                filePath = "assets/Consumables/green.png";
-                break;
-            case 6:
-                filePath = "assets/Consumables/red.png";
-                break;
-        }
-        planet = new Picture(x* SnakeGame1P.CELL_SIZE, y* SnakeGame1P.CELL_SIZE-4, filePath);
+        int randomConsumableBackground = (int) (Math.random() * BACKGROUNDS.length);
+        planet = new Picture(x* SnakeGame1P.CELL_SIZE, y* SnakeGame1P.CELL_SIZE-4, BACKGROUNDS[randomConsumableBackground]);
+
     }
 
     public void hide() {

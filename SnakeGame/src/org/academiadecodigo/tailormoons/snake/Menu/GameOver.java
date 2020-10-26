@@ -8,7 +8,7 @@ import org.academiadecodigo.tailormoons.snake.Keyboard.OurKeyboardHandler;
 public class GameOver implements KeyHandler {
 
 
-    private Picture picture = new Picture(340, 226, "assets/Menu/GameOver.jpg");
+    private Picture picture = new Picture(340, 35, "assets/Menu/GameOver.jpg");
 
     private boolean isPlayButtonSelected = true;
     private boolean isBackButtonSelected;

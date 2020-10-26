@@ -5,12 +5,40 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OurKeyboardHandler implements KeyboardHandler {
 
+
+    private Map<Integer, Boolean> keyStates;
+    private Keyboard myKeyboard;
+
+    private int[] KEYS = {
+            KeyboardEvent.KEY_UP,
+            KeyboardEvent.KEY_DOWN,
+            KeyboardEvent.KEY_LEFT,
+            KeyboardEvent.KEY_RIGHT,
+            KeyboardEvent.KEY_W,
+            KeyboardEvent.KEY_S,
+            KeyboardEvent.KEY_A,
+            KeyboardEvent.KEY_D,
+            KeyboardEvent.KEY_SPACE,
+
+
+    };
     private KeyHandler keyHandling;
+
+    public OurKeyboardHandler() {
+        myKeyboard = new Keyboard(this);
+        keyStates = new HashMap<>();
+    }
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
+
+        keyStates.put(keyboardEvent.getKey(), true);
+
         try {
             keyHandling.pressed(keyboardEvent);
         } catch (InterruptedException e) {
@@ -20,66 +48,22 @@ public class OurKeyboardHandler implements KeyboardHandler {
 
     @Override
     public void keyReleased(KeyboardEvent keyboardEvent) {
+        keyStates.put(keyboardEvent.getKey(), false);
+    }
 
+    private void subscribe(int code, KeyboardEventType type) {
+        KeyboardEvent event = new KeyboardEvent();
+        event.setKey(code);
+        event.setKeyboardEventType(type);
+        myKeyboard.addEventListener(event);
     }
 
     public void keyMapping() {
-
-        Keyboard keyboard = new Keyboard(this);
-
-        KeyboardEvent left = new KeyboardEvent();
-        left.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        left.setKey(KeyboardEvent.KEY_LEFT);
-
-        keyboard.addEventListener(left);
-
-        KeyboardEvent right = new KeyboardEvent();
-        right.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        right.setKey(KeyboardEvent.KEY_RIGHT);
-
-        keyboard.addEventListener(right);
-
-        KeyboardEvent up = new KeyboardEvent();
-        up.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        up.setKey(KeyboardEvent.KEY_UP);
-
-        keyboard.addEventListener(up);
-
-        KeyboardEvent down = new KeyboardEvent();
-        down.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        down.setKey(KeyboardEvent.KEY_DOWN);
-        keyboard.addEventListener(down);
-
-
-        KeyboardEvent leftTwo = new KeyboardEvent();
-        leftTwo.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        leftTwo.setKey(KeyboardEvent.KEY_A);
-
-        keyboard.addEventListener(leftTwo);
-
-        KeyboardEvent rightTwo = new KeyboardEvent();
-        rightTwo.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        rightTwo.setKey(KeyboardEvent.KEY_W);
-
-        keyboard.addEventListener(rightTwo);
-
-        KeyboardEvent upTwo = new KeyboardEvent();
-        upTwo.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        upTwo.setKey(KeyboardEvent.KEY_D);
-
-        keyboard.addEventListener(upTwo);
-
-        KeyboardEvent downTwo = new KeyboardEvent();
-        downTwo.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        downTwo.setKey(KeyboardEvent.KEY_S);
-        keyboard.addEventListener(downTwo);
-
-        KeyboardEvent space = new KeyboardEvent();
-        space.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        space.setKey(KeyboardEvent.KEY_SPACE);
-
-        keyboard.addEventListener(space);
-
+        for (int code : KEYS) {
+            for (KeyboardEventType type : KeyboardEventType.values()) {
+                subscribe(code, type);
+            }
+        }
     }
 
     public void setKeyHandling(KeyHandler keyHandling) {
