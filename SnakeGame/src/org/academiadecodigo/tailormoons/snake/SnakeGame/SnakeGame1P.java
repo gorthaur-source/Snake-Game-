@@ -2,11 +2,14 @@ package org.academiadecodigo.tailormoons.snake.SnakeGame;
 
 import org.academiadecodigo.bootcamp.Sound;
 import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.tailormoons.snake.Direction;
 import org.academiadecodigo.tailormoons.snake.Keyboard.KeyHandler;
 
+import org.academiadecodigo.tailormoons.snake.Menu.GameOver;
+import org.academiadecodigo.tailormoons.snake.Menu.StartMenu;
 import org.academiadecodigo.tailormoons.snake.Node.Consumable;
 import org.academiadecodigo.tailormoons.snake.Node.SnakeParts;
 import org.academiadecodigo.tailormoons.snake.Snake.Snake;
@@ -25,7 +28,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
 
 
     //
-    protected static int delay = 120;
+    protected static int delay = 60;
     private Consumable food;
     private boolean[][] isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
     //  private Sound eat = new Sound("/assets/Sounds/eat.wav");
@@ -36,6 +39,8 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
     private Snake[] snake;
     private Text[] scoreText;
     private int[] score;
+    private Snake winner;
+    private boolean gameOver = false;
 
 
     public SnakeGame1P(SnakeGrid grid) {
@@ -145,12 +150,14 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
 
 
     public void start() throws InterruptedException {
-        while (!isGameOver()) {
-            Thread.sleep((long) (delay / snake[0].getSpeed()));
+
+        while (!gameOver) {
             for (int i = 0; i < playerNumber; i++) {
                 snake[i].move();
                 checkCollision();
                 checkCollisionsBetweenSnakes();
+                isGameOver();
+                Thread.sleep(delay);
                 if (snakeHasEaten(snake[i])) {
                     score[i] += 100;
                     updateScore(i);
@@ -160,13 +167,15 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
                 }
             }
         }
-    }
+        Thread.sleep(100);
+        }
+
 
 
     public boolean isGameOver() {
         for (int i = 0; i < playerNumber; i++) {
             if (snake[i].isDead()) {
-                //   die.play(true);
+                gameOver = true;//   die.play(true);
                 return true;
             }
         }
@@ -188,12 +197,14 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
                     break;
                 } else if ((snake[j].getHead().getX() == snake[j + 1].getSnakeBody().get(i).getX() && snake[j].getHead().getY() == snake[j + 1].getSnakeBody().get(i).getY())) {
                     snake[j].setIsDead();
+                    winner = snake[j+1];
                     break;
                 }
             }
             for (int i = 1; i < snake[j].getLength(); i++) {
                 if (snake[j + 1].getHead().getX() == snake[j].getSnakeBody().get(i).getX() && snake[j + 1].getHead().getY() == snake[j].getSnakeBody().get(i).getY()) {
                     snake[j + 1].setIsDead();
+                    winner = snake[j];
                     break;
                 }
             }
@@ -212,7 +223,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
                 scoreText[0].setColor(Color.RED);
                 scoreText[0].draw();
             }
-            if (playerNumber == 2) {
+            else if (playerNumber == 2) {
                 scoreText[0] = new Text(5, 2, "Score: " + score[0]);
                 scoreText[0].setColor(Color.RED);
                 scoreText[0].draw();
@@ -267,7 +278,7 @@ public class SnakeGame1P implements SnakeGame, KeyHandler {
                     }
                 }
             }
-            if (playerNumber == 2) {
+            else if (playerNumber == 2) {
                 if (!snake[1].isDirectionChanged()) {
                     snake[1].setDirectionChanged(true);
                     switch (e.getKey()) {

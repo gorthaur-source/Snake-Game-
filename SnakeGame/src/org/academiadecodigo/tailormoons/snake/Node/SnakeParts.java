@@ -50,7 +50,7 @@ public class SnakeParts extends Node {
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
-                    return;
+                    break;
                 }
                 x--;
                 figure.translate(-SnakeGame1P.CELL_SIZE, 0);
@@ -62,7 +62,7 @@ public class SnakeParts extends Node {
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
-                    return;
+                    break;
                 }
                 y++;
                 figure.translate(0, SnakeGame1P.CELL_SIZE);
@@ -74,7 +74,7 @@ public class SnakeParts extends Node {
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
-                    return;
+                    break;
                 }
                 y--;
                 figure.translate(0, -SnakeGame1P.CELL_SIZE);
@@ -86,7 +86,7 @@ public class SnakeParts extends Node {
                     figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
-                    return;
+                    break;
                 }
                 x++;
                 figure.translate(SnakeGame1P.CELL_SIZE, 0);
@@ -124,10 +124,6 @@ public class SnakeParts extends Node {
     }
 
     public void setDirection(Direction direction) {
-        if (this.direction.isOpposite(direction)) {
-            return;
-        }
         this.direction = direction;
-        System.out.println("Changed Direction of Head" + direction);
     }
 }

@@ -42,13 +42,10 @@ public class StartMenu implements KeyHandler {
     private boolean isExitButtonSelected;
     private boolean isObstaclesSelected;
     private boolean isNoobSelected;
-    private SnakeGame game;
-    public int playerType;
+    private int playerType;
     private Sound music;
     private String filePathMusic;
-    public int gameType;
-    private int selection;
-    Runnable games;
+    private int gameType;
 
     public StartMenu(OurKeyboardHandler handler) {
         this.handler = handler;
@@ -94,10 +91,6 @@ public class StartMenu implements KeyHandler {
 
     }
 
-
-    public int getSelection() {
-        return selection;
-    }
 
     @Override
     public void pressed(KeyboardEvent e) throws InterruptedException {
@@ -238,11 +231,18 @@ public class StartMenu implements KeyHandler {
                         picture.delete();
                         snakeLogo.delete();
                         music.close();
+                        Thread.sleep(500);
                         gameType = 2;
                         break;
                     }
                 }
         }
+    }
+    public int getPlayerType() {
+        return playerType;
+    }
+    public int getGameType() {
+        return gameType;
     }
 
 }
