@@ -42,29 +42,19 @@ public class StartMenu implements KeyHandler {
     private boolean isNoobSelected;
     private volatile int playerType;
     private Sound music;
-    private String filePathMusic;
     private int gameType;
+    private static final String[] MUSICS = {
+            "/assets/Sounds/Music/1.wav",
+            "/assets/Sounds/Music/2.wav",
+            "/assets/Sounds/Music/3.wav",
+            "/assets/Sounds/Music/4.wav"
+    };
 
     public StartMenu() {
 
-        int randomMusic = (int) (Math.random() * 4);
+        int randomMusic = (int) (Math.random() * MUSICS.length);
 
-        switch (randomMusic) {
-            case 0:
-                filePathMusic = "/assets/Sounds/Music/1.wav";
-                break;
-            case 1:
-                filePathMusic = "/assets/Sounds/Music/2.wav";
-                break;
-            case 2:
-                filePathMusic = "/assets/Sounds/Music/3.wav";
-                break;
-            case 3:
-                filePathMusic = "/assets/Sounds/Music/4.wav";
-                break;
-        }
-        music = new Sound(filePathMusic);
-
+        music = new Sound(MUSICS[randomMusic]);
     }
 
     public void init() throws InterruptedException {
