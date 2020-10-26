@@ -33,8 +33,6 @@ public class StartMenu implements KeyHandler {
     private Picture player2ButtonSelected = new Picture(540, 600, "assets/Menu/2PlayersEdge-300x100.png");
     private Picture player2Button = new Picture(540, 600, "assets/Menu/TWOPlayers unselected-300x100.png");
 
-    private OurKeyboardHandler handler;
-
     private boolean isStartButtonSelected = true;
     private boolean isPlayer1Selected;
     private boolean isPlayer2Selected;
@@ -42,13 +40,12 @@ public class StartMenu implements KeyHandler {
     private boolean isExitButtonSelected;
     private boolean isObstaclesSelected;
     private boolean isNoobSelected;
-    private int playerType;
+    private volatile int playerType;
     private Sound music;
     private String filePathMusic;
     private int gameType;
 
-    public StartMenu(OurKeyboardHandler handler) {
-        this.handler = handler;
+    public StartMenu() {
 
         int randomMusic = (int) (Math.random() * 4);
 

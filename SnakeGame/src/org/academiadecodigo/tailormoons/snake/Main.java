@@ -17,14 +17,13 @@ public class Main {
 
         OurKeyboardHandler ourKeyboard = new OurKeyboardHandler();
         ourKeyboard.keyMapping();
-        StartMenu startMenu = new StartMenu(ourKeyboard);
+        StartMenu startMenu = new StartMenu();
         ourKeyboard.setKeyHandling(startMenu);
         startMenu.init();
 
         boolean gameOver = false;
 
         while(true) {
-            System.out.println("Waiting for game selection"); //?
             if(startMenu.getPlayerType() == 1 && startMenu.getGameType()== 1) break;
             else if (startMenu.getPlayerType() == 1 && startMenu.getGameType() == 2) break;
             else if (startMenu.getPlayerType() == 2 && startMenu.getGameType() == 2) break;
