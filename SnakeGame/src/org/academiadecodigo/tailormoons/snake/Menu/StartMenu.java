@@ -33,8 +33,6 @@ public class StartMenu implements KeyHandler {
     private Picture player2ButtonSelected = new Picture(540, 600, "assets/Menu/2PlayersEdge-300x100.png");
     private Picture player2Button = new Picture(540, 600, "assets/Menu/TWOPlayers unselected-300x100.png");
 
-    private OurKeyboardHandler handler;
-
     private boolean isStartButtonSelected = true;
     private boolean isPlayer1Selected;
     private boolean isPlayer2Selected;
@@ -42,35 +40,21 @@ public class StartMenu implements KeyHandler {
     private boolean isExitButtonSelected;
     private boolean isObstaclesSelected;
     private boolean isNoobSelected;
-    private SnakeGame game;
-    public int playerType;
+    private volatile int playerType;
     private Sound music;
-    private String filePathMusic;
-    public int gameType;
-    private int selection;
-    Runnable games;
+    private int gameType;
+    private static final String[] MUSICS = {
+            "/assets/Sounds/Music/1.wav",
+            "/assets/Sounds/Music/2.wav",
+            "/assets/Sounds/Music/3.wav",
+            "/assets/Sounds/Music/4.wav"
+    };
 
-    public StartMenu(OurKeyboardHandler handler) {
-        this.handler = handler;
+    public StartMenu() {
 
-        int randomMusic = (int) (Math.random() * 4);
+        int randomMusic = (int) (Math.random() * MUSICS.length);
 
-        switch (randomMusic) {
-            case 0:
-                filePathMusic = "/assets/Sounds/Music/1.wav";
-                break;
-            case 1:
-                filePathMusic = "/assets/Sounds/Music/2.wav";
-                break;
-            case 2:
-                filePathMusic = "/assets/Sounds/Music/3.wav";
-                break;
-            case 3:
-                filePathMusic = "/assets/Sounds/Music/4.wav";
-                break;
-        }
-        music = new Sound(filePathMusic);
-
+        music = new Sound(MUSICS[randomMusic]);
     }
 
     public void init() throws InterruptedException {
@@ -94,10 +78,6 @@ public class StartMenu implements KeyHandler {
 
     }
 
-
-    public int getSelection() {
-        return selection;
-    }
 
     @Override
     public void pressed(KeyboardEvent e) throws InterruptedException {
@@ -238,11 +218,18 @@ public class StartMenu implements KeyHandler {
                         picture.delete();
                         snakeLogo.delete();
                         music.close();
+                        Thread.sleep(500);
                         gameType = 2;
                         break;
                     }
                 }
         }
+    }
+    public int getPlayerType() {
+        return playerType;
+    }
+    public int getGameType() {
+        return gameType;
     }
 
 }

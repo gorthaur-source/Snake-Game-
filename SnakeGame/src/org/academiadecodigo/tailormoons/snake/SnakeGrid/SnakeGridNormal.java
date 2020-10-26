@@ -1,5 +1,6 @@
 package org.academiadecodigo.tailormoons.snake.SnakeGrid;
 
+import org.academiadecodigo.bootcamp.Sound;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
@@ -15,9 +16,14 @@ public class SnakeGridNormal implements SnakeGrid {
     public static final int ROWS = 40;
     public static final int COLS = 60;
     private boolean[][] isCovered = new boolean[COLS][ROWS];
-    private Picture background;
-    private String filePath;
-
+    private final String[] BACKGROUNDS = {
+            "assets/Backgrounds/space.png",
+            "assets/Backgrounds/space1.jpg",
+            "assets/Backgrounds/lightspeed.jpg",
+            "assets/Backgrounds/shady.jpg",
+            "assets/Backgrounds/hole.jpg",
+            "assets/Backgrounds/hole1.jpg"
+    };
 
     public SnakeGridNormal() {
     }
@@ -25,30 +31,9 @@ public class SnakeGridNormal implements SnakeGrid {
 
     @Override
     public void initGrid() {
+        int randomBackground = (int) (Math.random() * BACKGROUNDS.length);
 
-        int zeroToFive = (int) (Math.random() * 6);
-
-        switch(zeroToFive) {
-            case 0:
-                filePath = "assets/Backgrounds/space.png";
-                break;
-            case 1:
-                filePath = "assets/Backgrounds/space1.jpg";
-                break;
-            case 2:
-                filePath = "assets/Backgrounds/lightspeed.jpg";
-                break;
-            case 3:
-                filePath = "assets/Backgrounds/shady.jpg";
-            case 4:
-                filePath = "assets/Backgrounds/hole.jpg";
-                break;
-            case 5:
-                filePath = "assets/Backgrounds/hole1.jpg";
-                break;
-        }
-
-        background = new Picture(PADDING, PADDING, filePath);
+        Picture background = new Picture(PADDING, PADDING, BACKGROUNDS[randomBackground]);
         background.draw();
 
     }
