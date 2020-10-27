@@ -6,9 +6,10 @@ import org.academiadecodigo.simplegraphics.pictures.Picture;
 import org.academiadecodigo.tailormoons.snake.Keyboard.KeyHandler;
 import org.academiadecodigo.tailormoons.snake.Keyboard.OurKeyboardHandler;
 import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame;
-import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridNormal;
 import org.academiadecodigo.tailormoons.snake.SnakeGrid.SnakeGridObstacles;
+
+import java.security.Key;
 
 
 public class StartMenu implements KeyHandler {
@@ -33,6 +34,9 @@ public class StartMenu implements KeyHandler {
     private Picture player2ButtonSelected = new Picture(540, 600, "assets/Menu/2PlayersEdge-300x100.png");
     private Picture player2Button = new Picture(540, 600, "assets/Menu/TWOPlayers unselected-300x100.png");
 
+    private boolean  isP1;
+    private  boolean isSpacePress;
+    private boolean isP2;
     private boolean isStartButtonSelected = true;
     private boolean isPlayer1Selected;
     private boolean isPlayer2Selected;
@@ -40,9 +44,10 @@ public class StartMenu implements KeyHandler {
     private boolean isExitButtonSelected;
     private boolean isObstaclesSelected;
     private boolean isNoobSelected;
+    private OurKeyboardHandler handler;
     private volatile int playerType;
+    private  int gameType;
     private Sound music;
-    private int gameType;
     private static final String[] MUSICS = {
             "/assets/Sounds/Music/1.wav",
             "/assets/Sounds/Music/2.wav",
@@ -57,7 +62,7 @@ public class StartMenu implements KeyHandler {
         music = new Sound(MUSICS[randomMusic]);
     }
 
-    public void init() throws InterruptedException {
+    public void init(){
 
 
         music.play(true);
@@ -79,8 +84,20 @@ public class StartMenu implements KeyHandler {
     }
 
 
+    public void navigationUpdate() {
+
+        if(isSpacePress) {
+            if(isP1) playerType = 1;
+            else if(isP2) playerType = 2;
+            if (isObstaclesSelected) gameType = 2;
+            else if (isNoobSelected) gameType = 1;
+        }
+    }
+
+
     @Override
-    public void pressed(KeyboardEvent e) throws InterruptedException {
+    public void pressed(KeyboardEvent e) {
+
         switch (e.getKey()) {
             case KeyboardEvent.KEY_DOWN:
                 if (isStartButtonSelected) {
@@ -89,11 +106,6 @@ public class StartMenu implements KeyHandler {
                     exitButtonSelected.draw();
                     isStartButtonSelected = false;
                     isExitButtonSelected = true;
-                    break;
-                } else if (isExitButtonSelected) {
-                    //   exitButtonSelected.delete();
-                    //  scoresButtonSelected.draw();
-                    //   isExitButtonSelected = false;
                     break;
                 } else if (isPlayer1Selected) {
                     player1ButtonSelected.delete();
@@ -112,6 +124,9 @@ public class StartMenu implements KeyHandler {
                     isObstaclesSelected = true;
                     break;
                 }
+                else if (isExitButtonSelected) break;
+                else if (isPlayer2Selected) break;
+
             case KeyboardEvent.KEY_UP:
                 if (isScoreButtonSelected) {
                     scoresButtonSelected.delete();
@@ -169,16 +184,16 @@ public class StartMenu implements KeyHandler {
                     break;
                 } else if (isPlayer1Selected) {
                     isPlayer1Selected = false;
+                    isP1 = true;
                     player1ButtonSelected.delete();
                     player2Button.delete();
-                    playerType = 1;
                     obstacles.draw();
                     noObstaclesSelected.draw();
                     isNoobSelected = true;
                     break;
                 } else if (isPlayer2Selected) {
                     isPlayer2Selected = false;
-                    playerType = 2;
+                    isP2 = true;
                     player1ButtonSelected.delete();
                     player2Button.delete();
                     obstacles.draw();
@@ -186,44 +201,31 @@ public class StartMenu implements KeyHandler {
                     isNoobSelected = true;
                     break;
                 } else if (isNoobSelected) {
-                    if (playerType == 1) {
-                        obstaclesSelected.delete();
-                        noObstaclesSelected.delete();
-                        picture.delete();
-                        snakeLogo.delete();
-                        music.close();
-                        gameType = 1;
-                        break;
-                    } else if (playerType == 2) {
-                        obstaclesSelected.delete();
-                        noObstaclesSelected.delete();
-                        picture.delete();
-                        snakeLogo.delete();
-                        music.close();
-                        gameType = 1;
-                        break;
-                    }
-                } else if (isObstaclesSelected) {
-                    if (playerType == 1) {
-                        obstaclesSelected.delete();
-                        noObstacles.delete();
-                        picture.delete();
-                        snakeLogo.delete();
-                        music.close();
-                        gameType = 2;
-                        break;
-                    } else if (playerType == 2) {
-                        obstaclesSelected.delete();
-                        noObstacles.delete();
-                        picture.delete();
-                        snakeLogo.delete();
-                        music.close();
-                        Thread.sleep(500);
-                        gameType = 2;
-                        break;
-                    }
+                    music.close();
+                    obstaclesSelected.delete();
+                    noObstaclesSelected.delete();
+                    picture.delete();
+                    snakeLogo.delete();
+                    isSpacePress = true;
+                    break;
                 }
+                if (isObstaclesSelected) {
+                    music.close();
+                    obstaclesSelected.delete();
+                    noObstacles.delete();
+                    picture.delete();
+                    snakeLogo.delete();
+                    isSpacePress = true;
+                    break;
+                }
+
         }
+    }
+
+
+
+    public void setHandler(OurKeyboardHandler handler) {
+        this.handler = handler;
     }
     public int getPlayerType() {
         return playerType;
@@ -233,4 +235,3 @@ public class StartMenu implements KeyHandler {
     }
 
 }
-

@@ -1,6 +1,6 @@
 package org.academiadecodigo.tailormoons.snake.Node;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
-import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
+import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
@@ -20,7 +20,7 @@ public class SnakeParts extends Node {
         super(x, y);
         direction = Direction.UP;
         previousDirection= Direction.UP;
-        figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
+        figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
         figure.setColor(Color.GREEN);
         figure.fill();
 
@@ -47,49 +47,49 @@ public class SnakeParts extends Node {
                 if (x == 0) {
                     x = SnakeGridNormal.COLS - 1;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     break;
                 }
                 x--;
-                figure.translate(-SnakeGame1P.CELL_SIZE, 0);
+                figure.translate(-SnakeGame.CELL_SIZE, 0);
                 break;
             case DOWN:
                 if (y == SnakeGridNormal.ROWS - 1) {
                     y = 0;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     break;
                 }
                 y++;
-                figure.translate(0, SnakeGame1P.CELL_SIZE);
+                figure.translate(0, SnakeGame.CELL_SIZE);
                 break;
             case UP:
                 if (y == 0) {
                     y = SnakeGridNormal.ROWS - 1;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     break;
                 }
                 y--;
-                figure.translate(0, -SnakeGame1P.CELL_SIZE);
+                figure.translate(0, -SnakeGame.CELL_SIZE);
                 break;
             case RIGHT:
                 if (x == SnakeGridNormal.COLS - 1) {
                     x = 0;
                     figure.delete();
-                    figure = new Rectangle(x * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, y * SnakeGame1P.CELL_SIZE + SnakeGame1P.PADDING, SnakeGame1P.CELL_SIZE, SnakeGame1P.CELL_SIZE);
+                    figure = new Rectangle(x * SnakeGame.CELL_SIZE + SnakeGame.PADDING, y * SnakeGame.CELL_SIZE + SnakeGame.PADDING, SnakeGame.CELL_SIZE, SnakeGame.CELL_SIZE);
                     figure.setColor(Color.GREEN);
                     figure.fill();
                     break;
                 }
                 x++;
-                figure.translate(SnakeGame1P.CELL_SIZE, 0);
+                figure.translate(SnakeGame.CELL_SIZE, 0);
                 break;
         }
     }

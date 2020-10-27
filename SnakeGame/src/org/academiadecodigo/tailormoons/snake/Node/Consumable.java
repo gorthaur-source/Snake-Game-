@@ -1,9 +1,7 @@
 package org.academiadecodigo.tailormoons.snake.Node;
 
-import org.academiadecodigo.simplegraphics.graphics.Color;
-import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
-import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame1P;
+import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame;
 
 public class Consumable extends Node{
 
@@ -22,7 +20,7 @@ public class Consumable extends Node{
         super(x, y);
 
         int randomConsumableBackground = (int) (Math.random() * BACKGROUNDS.length);
-        planet = new Picture(x* SnakeGame1P.CELL_SIZE, y* SnakeGame1P.CELL_SIZE-4, BACKGROUNDS[randomConsumableBackground]);
+        planet = new Picture(x* SnakeGame.CELL_SIZE, y* SnakeGame.CELL_SIZE-4, BACKGROUNDS[randomConsumableBackground]);
 
     }
 
