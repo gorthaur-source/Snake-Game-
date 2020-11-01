@@ -17,6 +17,9 @@ public class BasicTimer {
         }
     }
 
+    public int getFps() {
+        return fps;
+    }
     public void changeFPS(int frameRate) {
         fps = frameRate;
     }

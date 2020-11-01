@@ -1,9 +1,12 @@
+
 package org.academiadecodigo.tailormoons.snake.Keyboard;
 
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
+import org.academiadecodigo.tailormoons.snake.Menu.StartMenu;
+import org.academiadecodigo.tailormoons.snake.SnakeGame.SnakeGame;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +14,6 @@ import java.util.Map;
 public class OurKeyboardHandler implements KeyboardHandler {
 
 
-    private Map<Integer, Boolean> keyStates;
     private Keyboard myKeyboard;
 
     private int[] KEYS = {
@@ -31,13 +33,12 @@ public class OurKeyboardHandler implements KeyboardHandler {
 
     public OurKeyboardHandler() {
         myKeyboard = new Keyboard(this);
-        keyStates = new HashMap<>();
     }
+
+
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
-
-        keyStates.put(keyboardEvent.getKey(), true);
 
         try {
             keyHandling.pressed(keyboardEvent);
@@ -48,7 +49,7 @@ public class OurKeyboardHandler implements KeyboardHandler {
 
     @Override
     public void keyReleased(KeyboardEvent keyboardEvent) {
-        keyStates.put(keyboardEvent.getKey(), false);
+
     }
 
     private void subscribe(int code, KeyboardEventType type) {
@@ -69,6 +70,5 @@ public class OurKeyboardHandler implements KeyboardHandler {
     public void setKeyHandling(KeyHandler keyHandling) {
         this.keyHandling = keyHandling;
     }
-
 
 }
