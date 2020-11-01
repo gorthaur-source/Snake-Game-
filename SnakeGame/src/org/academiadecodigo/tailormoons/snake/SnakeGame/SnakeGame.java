@@ -29,7 +29,7 @@ public class SnakeGame implements KeyHandler {
 
 
     //
-    BasicTimer delays = new BasicTimer(30);
+    private BasicTimer delays = new BasicTimer(30);
     protected static int delay = 60;
     private Consumable food;
     private boolean[][] isCovered = new boolean[SnakeGridNormal.COLS][SnakeGridNormal.ROWS];
@@ -142,13 +142,14 @@ public class SnakeGame implements KeyHandler {
 
     public void start() {
 
+        if(playerNumber == 2) delays.changeFPS(40);
+
         while (!gameOver) {
             for (int i = 0; i < playerNumber; i++) {
                 delays.sync();
-                System.out.println(delays.getFps());
-                checkCollision();
-                checkCollisionsBetweenSnakes();
-                isGameOver();
+               checkCollision();
+               checkCollisionsBetweenSnakes();
+               isGameOver();
                 snake[i].move();
                 if (snakeHasEaten(snake[i])) {
                     score[i] += 100;
@@ -294,6 +295,9 @@ public class SnakeGame implements KeyHandler {
             }
         }
 
+    public void deactivateMusic() {
+        music.close();
+    }
 
         public void setPlayerNumber ( int numberOfPlayers){
             playerNumber = numberOfPlayers;
