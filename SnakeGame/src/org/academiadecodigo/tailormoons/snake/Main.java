@@ -27,7 +27,6 @@ public class Main {
                 ourKeyboard.setKeyHandling(startMenu);
                 startMenu.init();
                 isStartEngaged = false;
-                System.out.println(isStartEngaged);
                 gameOver = true;
                 over.setPlayAgain(false);
             }

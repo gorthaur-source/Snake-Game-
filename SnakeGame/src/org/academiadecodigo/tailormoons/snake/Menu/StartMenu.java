@@ -42,8 +42,8 @@ public class StartMenu implements KeyHandler {
     private OurKeyboardHandler handler;
     private volatile int playerType;
     private volatile int gameType;
-    int randomMusic = (int) (Math.random() * MUSICS.length);
-    private Sound music = new Sound(MUSICS[randomMusic]);
+    int randomMusic;
+    private Sound music;
 
     private static final String[] MUSICS = {
             "/assets/Sounds/Music/1.wav",
@@ -59,6 +59,8 @@ public class StartMenu implements KeyHandler {
 
     public void init() {
 
+        randomMusic = (int) (Math.random() * MUSICS.length);
+        music = new Sound(MUSICS[randomMusic]);
         isSpacePress = false;
         gameType = -1;
         isStartButtonSelected = true;
